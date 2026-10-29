@@ -235,6 +235,10 @@ double-click cannot pass both confirmation stages at once.
   `/api/preflight` into field pre-fills (`prefillPlan`) and keep `SESSION_SECURE`/
   `TRUST_PROXY` while the exposure choice is unchanged (`accessEnv`); served to the
   page and tested without a browser.
+- `field-checks.js` - field checks that mirror a server rule (cron ranges as
+  the backup scheduler accepts them, the `REPLACE_WITH_` placeholder, an absolute
+  container path, ID/secret pairs, WebDAV without URL); served to the page and
+  bound to the server code by `test/test-installer-validation.js`.
 - `i18n-mini.js` + `locales/*.json` — web-wizard localization.
 - `locales/cli/*.sh` — CLI-installer localization (sourced by `install.sh`).
 - `install.html` — the wizard UI.

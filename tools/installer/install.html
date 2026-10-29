@@ -782,15 +782,6 @@
       font-size: var(--type-caption); font-weight: 500; color: var(--color-text-secondary);
     }
     .toggle-badge[data-state="set"] { color: var(--color-text-primary); }
-    /* Einordnung einer Zeile, kein Zustand: "Legacy" an der Apple-Zeile. Leise
-       wie ein Etikett in der App - Kante statt Flaeche, keine Akzentfarbe, die
-       gehoert der einen Primaeraktion. */
-    .toggle-tag {
-      font-size: var(--type-caption); font-weight: 600; line-height: 1.38;
-      color: var(--color-text-secondary);
-      padding: 0 8px; border-radius: var(--radius-full); white-space: nowrap; flex-shrink: 0;
-      box-shadow: inset 0 0 0 1px var(--color-border);
-    }
     .toggle-badge[data-state="set"]::before {
       content: ''; width: 14px; height: 14px; flex-shrink: 0;
       background: var(--color-success);
@@ -984,16 +975,10 @@
     a.next-step:hover { background: color-mix(in srgb, var(--color-text-primary) 5%, var(--color-surface)); }
     a.next-step:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--color-accent); }
 
-    /* Hochkonsequente Warnung (Schlüsselverlust, Backup-Erinnerung) - stärker als .info-banner. */
-    .danger-banner {
-      display: flex; gap: 10px; align-items: flex-start;
-      margin-bottom: 18px; padding: 12px 14px; border-radius: var(--radius-sm);
-      background: color-mix(in srgb, var(--color-danger) 9%, transparent);
-      border: 1.5px solid color-mix(in srgb, var(--color-danger) 32%, transparent);
-      color: var(--color-text-primary); font-size: var(--text-sm); line-height: 1.5;
-    }
-    .danger-banner .warn-icon { color: var(--color-danger); font-size: var(--text-base); line-height: 1.4; flex-shrink: 0; }
-    .danger-banner strong { color: var(--color-danger); }
+    /* HIER STAND .danger-banner (rot) fuer die Schluessel-Warnung. Rot heisst
+       in der App "etwas ist kaputt" - die Warnung ist aber eine Vorsorge, und
+       ihr Text widersprach sich ("jetzt speichern" vs. "am Ende
+       herunterladen"). Sie traegt seit der Critique vom 29.10. .warn-banner. */
 
     /* Weichere Erinnerung (kein Live-Hazard, z. B. Backup-Hinweis auf „Fertig"). */
     .warn-banner {
@@ -1435,7 +1420,7 @@
              #cfg-existing warnt. -->
         <div class="warn-banner" role="note">
           <span class="warn-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></span>
-          <span data-i18n="simple.backupReminder">After setup, back up the generated .env file - it holds your only encryption keys.</span>
+          <span data-i18n="simple.backupReminder">At the end you can download your key file (.env). Keep it somewhere safe - without it your data cannot be recovered.</span>
         </div>
         <button type="button" class="link-btn" id="simple-to-advanced" data-i18n="simple.switchAdvanced">Need more options? Switch to advanced setup</button>
         <div class="error-banner" id="simple-err" role="alert"></div>
@@ -1532,12 +1517,12 @@
       <div class="card-head">
         <div class="step-tag"></div>
         <h2 tabindex="-1" data-i18n="secrets.title">Security Keys</h2>
-        <p data-i18n="secrets.subtitle">These protect your session and encrypt the database. Store your .env file safely - losing these keys means losing access to your data.</p>
+        <p data-i18n="secrets.subtitle">These protect your session and encrypt the database.</p>
       </div>
       <div class="card-body">
-        <div class="danger-banner" role="note">
+        <div class="warn-banner" role="note">
           <span class="warn-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg></span>
-          <span data-i18n="secrets.dangerWarn">Save these keys now. If you lose them, your encrypted data cannot be recovered - there is no reset.</span>
+          <span data-i18n="secrets.keyWarn">At the end of setup you get your key file (.env) with both keys. Keep it somewhere safe: without the database key your data is lost - there is no reset.</span>
         </div>
         <div class="info-banner" id="sec-preserved" style="display:none" role="note" data-i18n="secrets.preserved">
           Your existing keys are kept, so this setup will not lock you out of the current database. Leave a field empty to keep its key; entering a new value replaces it.
@@ -1711,14 +1696,14 @@
             <p class="hint" data-i18n="calendar.outlookNote">One-way push: Yuvomi stays the source of truth and overwrites changes made in Outlook. Family accounts are connected later in the app under Settings.</p>
           </div>
         </div>
-        <!-- Apple zuletzt und als "Legacy": die .env traegt genau EIN iCloud-Konto,
-             die App verwaltet beliebig viele CalDAV-Konten (auch Nextcloud) und
-             kann sie pruefen. Die Zeile bleibt, weil bestehende Installationen sie
-             nutzen - sie ist nur nicht mehr der Weg, den der Wizard nahelegt. -->
+        <!-- Apple zuletzt: die .env traegt genau EIN iCloud-Konto, die App
+             verwaltet beliebig viele CalDAV-Konten (auch Nextcloud) und kann sie
+             pruefen. Die Zeile bleibt, weil bestehende Installationen sie nutzen.
+             Das Etikett "Legacy" ist entfallen (Critique 29.10.): ein Fachwort,
+             das Laien nichts sagt - die Notiz unter der Gruppe nennt den Weg. -->
         <div class="toggle-card" data-setup="apple-user apple-pass">
           <button type="button" class="toggle-head" data-toggle="apple-body" aria-expanded="false" aria-controls="apple-body">
             <span data-i18n="calendar.apple">Apple iCloud CalDAV</span>
-            <span class="toggle-tag" data-i18n="calendar.legacy">Legacy</span>
             <span class="toggle-badge" id="apple-badge" data-state="optional">Optional</span>
           </button>
           <div class="toggle-body" id="apple-body">
@@ -1741,8 +1726,9 @@
           </div>
         </div>
         </div>
-        <!-- Der Ausweg zur Legacy-Zeile, sichtbar ohne Aufklappen. -->
+        <!-- Der Weg zu weiteren Konten, sichtbar ohne Aufklappen. -->
         <p class="group-note" data-i18n="calendar.moreInApp">Add more CalDAV accounts, such as Nextcloud or a second iCloud account, in the app under Settings → Modules → Calendar.</p>
+        <div class="error-banner" id="cal-err" role="alert"></div>
       </div>
       <div class="card-foot">
         <button class="btn btn-ghost" data-back data-i18n="common.back">Back</button>
@@ -2248,7 +2234,7 @@
              den ersten Klick fuer wirkungslos und klickt "zum ersten Mal". -->
         <span class="vh" role="status" id="rev-armed-note"></span>
         <!-- Kein data-i18n: traegt die Zwei-Klick-Bestaetigung im Text. -->
-        <button class="btn btn-primary" id="rev-next">Save &amp; Start Docker</button>
+        <button class="btn btn-primary" id="rev-next">Save &amp; Start Yuvomi</button>
       </div>
     </div>
 
@@ -2261,7 +2247,7 @@
              steht dort, wo man zuerst hinsieht. data-i18n wandert mit, damit
              ein Sprachwechsel den Zustand behaelt. -->
         <h2 tabindex="-1" id="dkr-title" data-i18n="docker.title">Starting Yuvomi</h2>
-        <p id="dkr-subtitle" data-i18n="docker.subtitle">Pulling the image and starting the Docker container.</p>
+        <p id="dkr-subtitle" data-i18n="docker.subtitle">Yuvomi is being downloaded, started and checked.</p>
       </div>
       <div class="card-body">
         <!-- Die drei Phasen, die /api/status meldet, als Checkliste. Zustand in
@@ -2271,17 +2257,17 @@
         <ol class="phase-list inset-group" id="dkr-phases">
           <li class="phase" data-phase="pull" data-state="active">
             <span class="phase__mark" aria-hidden="true"></span>
-            <span data-i18n="docker.stepPull">Download image</span>
+            <span data-i18n="docker.stepPull">Download</span>
             <span class="vh phase__state"></span>
           </li>
           <li class="phase" data-phase="boot" data-state="waiting">
             <span class="phase__mark" aria-hidden="true"></span>
-            <span data-i18n="docker.stepBoot">Start container</span>
+            <span data-i18n="docker.stepBoot">Start</span>
             <span class="vh phase__state"></span>
           </li>
           <li class="phase" data-phase="health" data-state="waiting">
             <span class="phase__mark" aria-hidden="true"></span>
-            <span data-i18n="docker.stepHealth">Health check</span>
+            <span data-i18n="docker.stepHealth">Check</span>
             <span class="vh phase__state"></span>
           </li>
         </ol>
@@ -2319,7 +2305,7 @@
              aufklappt - das Banner darueber sagt "das Protokoll unten".
              Kein data-i18n: wechselt zwischen Anzeigen und Verbergen. -->
         <button type="button" class="btn btn-ghost btn-sm" id="dkr-logs-toggle" aria-controls="dkr-log" aria-expanded="false" style="display:none">Show log</button>
-        <div class="log-box" id="dkr-log" tabindex="0" role="region" aria-label="Container log" data-i18n-aria="docker.logLabel"></div>
+        <div class="log-box" id="dkr-log" tabindex="0" role="region" aria-label="Startup log" data-i18n-aria="docker.logLabel"></div>
       </div>
       <div class="card-foot" id="dkr-foot" style="display:none">
         <!-- Kein data-i18n: zustandsbehaftet (siehe setDockerPrimary). -->
@@ -2520,6 +2506,9 @@
 // No dynamic DOM generation. DOM API only (textContent, classList, style).
 import { initInstallerI18n, setLocale, getLocale, t, applyTranslations, applyRich } from '/i18n-mini.js';
 import { prefillPlan, accessEnv } from '/rerun-prefill.js';
+import {
+  isValidCron, isAbsoluteContainerPath, isPlaceholderSecret, pairGap, enabledWithoutUrl,
+} from '/field-checks.js';
 
 const $ = id => document.getElementById(id);
 
@@ -2800,10 +2789,17 @@ function isValidTimeZone(tz) {
   catch { return false; }
 }
 
-/** Ein 32-Byte-Hex-Secret vom Installer-Server holen. */
+/**
+ * Ein 32-Byte-Hex-Secret vom Installer-Server holen. Wirft bei einer
+ * Fehlantwort: vorher kam `undefined` zurueck, die Schluesselfelder blieben
+ * still leer, und erst "Weiter" meldete "Beide Schluessel sind erforderlich" -
+ * ohne Hinweis, dass der Installer gar nicht antwortete.
+ */
 async function genSecret() {
   const r = await fetch('/api/generate-secret', { method: 'POST' });
+  if (!r.ok) throw new Error(`generate-secret ${r.status}`);
   const d = await r.json();
+  if (!d?.secret) throw new Error('generate-secret: no secret');
   return d.secret;
 }
 
@@ -3350,10 +3346,12 @@ $('simple-host').addEventListener('keydown', e => {
 });
 
 function onEnterStep(name) {
+  // Beide laufen ohne await (der Schritt soll sofort stehen) - ohne catch war
+  // eine Ablehnung unbehandelt und das Feld blieb wortlos leer.
   if (name === 'secrets') {
-    autofillSecretFields();
+    autofillSecretFields().catch(() => showErr('sec-err', t('secrets.errGenerate')));
   } else if (name === 'simple') {
-    ensureKeys();
+    ensureKeys().catch(() => showErr('simple-err', t('secrets.errGenerate')));
     renderSimpleAccess();
     // Bestätigungszustand zurücksetzen, falls der Nutzer erneut hierher navigiert.
     simpleConfirmed = false;
@@ -3588,6 +3586,13 @@ document.addEventListener('change', clearFieldInvalid);
 function fail(bannerId, msg, inputId) {
   const el = inputId && $(inputId);
   const banner = $(bannerId);
+  // Liegt das Feld in einer zugeklappten Karte (ausgefuellt, dann
+  // zugeklappt), waere es unsichtbar und nicht fokussierbar: erst aufklappen.
+  const body = el?.closest('.toggle-body');
+  if (body && !body.classList.contains('open')) {
+    body.classList.add('open');
+    body.closest('.toggle-card')?.querySelector('.toggle-head')?.setAttribute('aria-expanded', 'true');
+  }
   // Das Banner unter das schuldige Feld ziehen: es stand am Ende des card-body
   // und lag bei langen Schritten ausserhalb des Viewports (gemessen: Bannertop
   // 787px bei 720px Viewport) - Sehende sahen nur den roten Rahmen, den Grund
@@ -3661,11 +3666,9 @@ document.addEventListener('click', async e => {
     btn.setAttribute('aria-busy', 'true');
     btn.textContent = t('common.generating');
     try {
-      const r = await fetch('/api/generate-secret', { method: 'POST' });
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      const d = await r.json();
+      const secret = await genSecret();
       const inp = $(genId);
-      inp.value = d.secret;
+      inp.value = secret;
       // Nach dem Generieren den Wert sichtbar machen und Kopieren anbieten -
       // dies ist der einzige Moment, in dem der Nutzer den Schlüssel notieren kann.
       inp.type = 'text';
@@ -3677,10 +3680,8 @@ document.addEventListener('click', async e => {
     } catch {
       // Ohne diesen Zweig blieb der Button nach einem Fehlschlag fuer immer
       // deaktiviert und ohne Namen stehen - der Schritt war dann nur noch
-      // ueber einen Reload verlassbar. Kein neuer Locale-Schluessel:
-      // docker.unknownError trifft die Aussage woertlich und ist in allen 23
-      // Sprachen vorhanden.
-      showErr('sec-err', t('docker.unknownError'));
+      // ueber einen Reload verlassbar. Dieselbe Meldung wie beim Vorbelegen.
+      showErr('sec-err', t('secrets.errGenerate'));
     } finally {
       btn.disabled = false;
       btn.removeAttribute('aria-busy');
@@ -3826,6 +3827,11 @@ $('sec-next').addEventListener('click', () => {
   const missing = (!ss && !preservedKeys.has('SESSION_SECRET')) ? 'sec-session'
     : (!dk && !preservedKeys.has('DB_ENCRYPTION_KEY')) ? 'sec-db' : null;
   if (missing) { fail('sec-err', t('secrets.errBoth'), missing); return; }
+  // Der Platzhalter aus .env.example ist kein Schluessel: server/auth.js und
+  // server/db.js brechen beim Start daran ab, der Wizard meldete das erst als
+  // gescheiterten Container-Start.
+  const placeholder = isPlaceholderSecret(ss) ? 'sec-session' : isPlaceholderSecret(dk) ? 'sec-db' : null;
+  if (placeholder) { fail('sec-err', t('secrets.errPlaceholder'), placeholder); return; }
   showErr('sec-err', '');
   S.SESSION_SECRET = ss;
   S.DB_ENCRYPTION_KEY = dk;
@@ -3859,6 +3865,19 @@ $('wea-next').addEventListener('click', () => {
 });
 
 $('cal-next').addEventListener('click', () => {
+  clearInvalid();
+  // Jede Verbindung braucht ihr Paar. Eine ID ohne Secret landete vorher in der
+  // .env, und der Kalender scheiterte erst beim ersten Verbinden in der App.
+  // Ein in der .env uebernommenes Secret zaehlt (Feld beim Rerun bewusst leer).
+  for (const [idField, secretField, secretKey, msg] of [
+    ['gcal-id', 'gcal-secret', 'GOOGLE_CLIENT_SECRET', 'calendar.errGooglePair'],
+    ['outlook-id', 'outlook-secret', 'MS_CLIENT_SECRET', 'calendar.errOutlookPair'],
+    ['apple-user', 'apple-pass', 'APPLE_APP_SPECIFIC_PASSWORD', 'calendar.errApplePair'],
+  ]) {
+    const gap = pairGap($(idField).value.trim(), $(secretField).value.trim(), keptSecrets.has(secretKey));
+    if (gap) { fail('cal-err', t(msg), gap === 'id' ? idField : secretField); return; }
+  }
+  showErr('cal-err', '');
   S.GOOGLE_CLIENT_ID = $('gcal-id').value.trim();
   S.GOOGLE_CLIENT_SECRET = $('gcal-secret').value.trim();
   // Vorläufiger Wert; adv-next setzt ihn nach der Proxy-Wahl endgültig aus
@@ -4039,7 +4058,10 @@ $('storage-next').addEventListener('click', () => {
   const backupOn = $('adv-backup-enable').checked;
   const schedule = backupOn ? $('adv-backup-schedule').value.trim() : '';
   const keep = backupOn ? $('adv-backup-keep').value.trim() : '';
-  if (schedule && schedule.split(/\s+/).length !== 5) { fail('storage-err', t('advanced.errSchedule'), 'adv-backup-schedule'); return; }
+  // Wertebereiche je Feld wie der Scheduler (field-checks.js): vorher zaehlte
+  // nur die Feldzahl, `99 * * * *` ging durch, und der Server schaltete die
+  // Backups beim Start still ab.
+  if (schedule && !isValidCron(schedule)) { fail('storage-err', t('advanced.errSchedule'), 'adv-backup-schedule'); return; }
   if (keep && !/^[1-9]\d*$/.test(keep)) { fail('storage-err', t('advanced.errKeep'), 'adv-backup-keep'); return; }
   // only persist BACKUP_ENABLED=false when explicitly disabled.
   S.BACKUP_ENABLED = backupOn ? '' : 'false';
@@ -4054,14 +4076,35 @@ $('storage-next').addEventListener('click', () => {
   // fand sie nach einem zweiten Lauf still abgeschaltet, waehrend URL, Benutzer
   // und Passwort stehen blieben. Dieselbe Form wie BACKUP_ENABLED darunter.
   S.DOCUMENT_STORAGE_LOCAL_ENABLED = $('adv-document-local-enable').checked ? 'true' : '';
-  S.DOCUMENT_STORAGE_LOCAL_PATH = $('adv-document-local-path').value.trim();
+  // Compose bindet den Host-Ordner an diesen Pfad; ein relatives Mount-Ziel
+  // laesst `compose up` scheitern.
+  const localPath = $('adv-document-local-path').value.trim();
+  if (localPath && !isAbsoluteContainerPath(localPath)) {
+    fail('storage-err', t('storage.errLocalPath'), 'adv-document-local-path');
+    return;
+  }
+  S.DOCUMENT_STORAGE_LOCAL_PATH = localPath;
   // Der Host-Ordner gehört zum Container-Pfad: fehlte er, zeigte das Volume
   // weiter auf /documents, während die App woanders hinschrieb. Die Uploads
   // landeten dann im Container-Overlay und waren beim nächsten Update weg.
   S.DOCUMENT_STORAGE_LOCAL_DIR = $('adv-document-local-dir').value.trim();
 
-  S.DOCUMENT_STORAGE_WEBDAV_ENABLED = $('adv-document-webdav-enable').checked ? 'true' : '';
-  S.DOCUMENT_STORAGE_WEBDAV_URL = $('adv-document-webdav-url').value.trim();
+  // Eingeschaltet ohne Adresse faellt sonst erst beim ersten Upload bzw. der
+  // ersten Sicherung auf - ausser die bestehende .env laeuft schon so.
+  const docWebdavOn = $('adv-document-webdav-enable').checked;
+  const docWebdavUrl = $('adv-document-webdav-url').value.trim();
+  if (enabledWithoutUrl(docWebdavOn, docWebdavUrl, rerunValues, 'DOCUMENT_STORAGE_WEBDAV_ENABLED', 'DOCUMENT_STORAGE_WEBDAV_URL')) {
+    fail('storage-err', t('storage.errWebdavUrl'), 'adv-document-webdav-url');
+    return;
+  }
+  const backupWebdavOn = $('adv-webdav-backup-enable').checked;
+  const backupWebdavUrl = $('adv-webdav-backup-url').value.trim();
+  if (enabledWithoutUrl(backupWebdavOn, backupWebdavUrl, rerunValues, 'WEBDAV_BACKUP_ENABLED', 'WEBDAV_BACKUP_URL')) {
+    fail('storage-err', t('storage.errWebdavUrl'), 'adv-webdav-backup-url');
+    return;
+  }
+  S.DOCUMENT_STORAGE_WEBDAV_ENABLED = docWebdavOn ? 'true' : '';
+  S.DOCUMENT_STORAGE_WEBDAV_URL = docWebdavUrl;
   S.DOCUMENT_STORAGE_WEBDAV_USERNAME = $('adv-document-webdav-username').value.trim();
   S.DOCUMENT_STORAGE_WEBDAV_PASSWORD = $('adv-document-webdav-password').value;
   S.DOCUMENT_STORAGE_WEBDAV_PATH = $('adv-document-webdav-path').value.trim();
@@ -4069,8 +4112,8 @@ $('storage-next').addEventListener('click', () => {
   // Entscheidung, ist aber der Server-Default.
 
   // Externe WebDAV-Backups (optional, zusätzlich zu den lokalen Backups).
-  S.WEBDAV_BACKUP_ENABLED  = $('adv-webdav-backup-enable').checked ? 'true' : '';
-  S.WEBDAV_BACKUP_URL      = $('adv-webdav-backup-url').value.trim();
+  S.WEBDAV_BACKUP_ENABLED  = backupWebdavOn ? 'true' : '';
+  S.WEBDAV_BACKUP_URL      = backupWebdavUrl;
   S.WEBDAV_BACKUP_USERNAME = $('adv-webdav-backup-username').value.trim();
   S.WEBDAV_BACKUP_PASSWORD = $('adv-webdav-backup-password').value;
   S.WEBDAV_BACKUP_PATH     = $('adv-webdav-backup-path').value.trim();
@@ -4337,7 +4380,15 @@ $('simple-next').addEventListener('click', async () => {
   }
 });
 
-let pollInterval = null;
+// Polling als setTimeout-Kette: der naechste Tick wird erst geplant, wenn die
+// Antwort da ist. setInterval feuerte alle 2 s ungeachtet dessen - bei einem
+// langsamen /api/status (Image-Pull, ausgelastetes NAS) stapelten sich offene
+// Requests, und ihre Antworten kamen in beliebiger Reihenfolge an.
+// pollRun zaehlt die Ketten: stopPolling() macht jede laufende ungueltig, auch
+// eine, deren Request gerade unterwegs ist.
+const POLL_EVERY_MS = 2000;
+let pollTimer = null;
+let pollRun = 0;
 let dockerStart = null;
 // Der Wartebildschirm war der längste und angstbesetzteste Moment der Reise und
 // hatte den geringsten Informationsgehalt: Spinner, ein Satz, ein Sekundenzähler.
@@ -4359,13 +4410,12 @@ const PHASE_KEYS = {
 };
 
 async function startDocker() {
-  // Ein noch laufendes Intervall zuerst abraeumen. Der Retry-Knopf erscheint
+  // Eine noch laufende Kette zuerst abraeumen. Der Retry-Knopf erscheint
   // schon nach 90 Sekunden Stillstand, also waehrend gepollt wird - ohne das
-  // hier ueberschreibt die Zeile unten pollInterval, die alte ID ist verloren,
-  // und zwei Timer pollen weiter. Beim Erfolg laesst sich nur der neuere
-  // stoppen, der verwaiste triggert den Erfolgsuebergang wieder und wieder.
-  clearInterval(pollInterval);
-  pollInterval = null;
+  // hier pollten zwei Ketten weiter, und die verwaiste triggerte den
+  // Erfolgsuebergang wieder und wieder.
+  stopPolling();
+  const run = pollRun;
   dockerStart = Date.now();
   pollFailures = 0;
   dockerDone = false;
@@ -4382,7 +4432,22 @@ async function startDocker() {
     dockerFailed(e.message);
     return;
   }
-  pollInterval = setInterval(pollDocker, 2000);
+  if (run === pollRun) schedulePoll(run);
+}
+
+/** Laufende Polling-Kette beenden (Erfolg, Fehler, Retry). */
+function stopPolling() {
+  clearTimeout(pollTimer);
+  pollTimer = null;
+  pollRun++;
+}
+
+/** Den naechsten Tick planen - erst nachdem der vorige beantwortet ist. */
+function schedulePoll(run) {
+  pollTimer = setTimeout(async () => {
+    await pollDocker(run);
+    if (run === pollRun && !dockerDone) schedulePoll(run);
+  }, POLL_EVERY_MS);
 }
 
 /** Benennt, was gerade passiert, statt durchgehend „Container wird gestartet". */
@@ -4505,17 +4570,19 @@ function revealDockerEscape() {
   foot.style.display = 'flex';
 }
 
-async function pollDocker() {
+async function pollDocker(run) {
   try {
     const r = await fetch('/api/status');
     if (!r.ok) throw new Error(`status ${r.status}`);
     const d = await r.json();
+    // Ueberholt (Retry waehrend der Request lief): die Antwort gehoert zu
+    // einem Start, den es nicht mehr gibt.
+    if (run !== pollRun) return;
     pollFailures = 0;
     showDockerLog(d.logs);
     if (d.status === 'running') {
       dockerSucceeded();
     } else if (d.status === 'error') {
-      clearInterval(pollInterval);
       reachPhase(d.phase);
       dockerFailed(d.logs || t('docker.unknownError'));
     } else {
@@ -4524,8 +4591,8 @@ async function pollDocker() {
   } catch {
     // Ein einzelner Fehlschlag ist normal, solange der Container hochfährt.
     // Eine ununterbrochene Serie ist es nicht.
+    if (run !== pollRun) return;
     if (++pollFailures >= MAX_POLL_FAILURES) {
-      clearInterval(pollInterval);
       dockerFailed(t('docker.unknownError'));
     }
   }
@@ -4535,7 +4602,7 @@ function dockerSucceeded() {
   // Endzustand nur einmal betreten: ein spaeter Tick aus einem Timer, der die
   // Antwort schon unterwegs hatte, darf den Schritt nicht erneut umschalten.
   if (dockerDone) return;
-  clearInterval(pollInterval);
+  stopPolling();
   dockerDone = true;
   dockerOutcome = 'running';
   renderPhases();
@@ -4577,7 +4644,7 @@ function dockerFailed(logs) {
   // Ohne diesen Riegel ueberschriebe ein solcher Nachzuegler den fertigen
   // Bildschirm mit einer Fehlermeldung.
   if (dockerDone) return;
-  clearInterval(pollInterval);
+  stopPolling();
   dockerDone = true;
   // Markiert wird die Phase, in der es stand - bzw. die, die der Server als
   // gescheitert meldet (pollDocker rueckt vorher vor).

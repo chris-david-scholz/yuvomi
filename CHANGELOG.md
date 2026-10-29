@@ -23,6 +23,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   is then reachable only on this computer.
 - **A public address without `http://` or `https://` is refused in the installer** instead of being
   silently replaced by an address derived from host and port.
+- **The installer catches settings the server would reject before saving them.** A backup schedule
+  like `99 * * * *` used to pass and then switched backups off at startup; the schedule is now
+  checked field by field (minute 0-59, hour 0-23, day 1-31, month 1-12, weekday 0-7). Google,
+  Outlook and iCloud need their ID and secret together, WebDAV switched on needs its URL, the
+  document folder inside the container must start with `/`, and the `REPLACE_WITH_` placeholder
+  from `.env.example` is no longer accepted as a key. A failed key generation now shows a message
+  instead of leaving the key fields silently empty, and the start screen no longer piles up status
+  requests when the server answers slowly.
+- **Clearer wording in the installer.** The key warning is now a calm notice that says what happens:
+  you get a key file (`.env`) at the end, and without the database key your data is lost. It used
+  to be a red alarm that asked you to save the keys "now". The start screen talks about
+  downloading, starting and checking Yuvomi instead of images, containers and health checks, the
+  start button reads "Save & Start Yuvomi" for Docker and Podman alike, and the iCloud row no longer
+  carries a "Legacy" label.
 
 ## [2.83.0] - 2026-10-29
 

@@ -1819,9 +1819,9 @@ test('Docker-Schirm: Phasen-Checkliste, Erfolg mit neuem Titel und Fokus, Fehler
       const PHASE_KEYS = { pull: 'docker.phasePull', boot: 'docker.phaseBoot', health: 'docker.phaseHealth' };
       const PHASE_ORDER = ${JSON.stringify(literal('PHASE_ORDER'))};
       let phaseReached = 0, dockerOutcome = null, dockerDoneSecs = null, dockerTextKey = 'docker.phasePull';
-      let dockerDone = false, pollInterval = null, dockerStart = Date.now() - 34_000;
+      let dockerDone = false, dockerStart = Date.now() - 34_000;
       let flow = ['review', 'docker'], currentStep = 1;
-      const clearInterval = () => {}, setDockerPrimary = () => {}, next = () => {}, restartDocker = () => {};
+      const stopPolling = () => {}, setDockerPrimary = () => {}, next = () => {}, restartDocker = () => {};
       const renderStepNav = () => {};   // eigener Test: "Docker in der Schrittliste"
       ${fnSource('setDockerText')}
       ${fnSource('reachPhase')}

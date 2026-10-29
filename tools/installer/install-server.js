@@ -668,6 +668,11 @@ async function route(req, res, server) {
     return serveStatic(res, resolve(__dirname, 'rerun-prefill.js'), 'text/javascript; charset=utf-8');
   }
 
+  // Feldpruefungen, die eine Server-Regel spiegeln (siehe field-checks.js).
+  if (req.method === 'GET' && url.pathname === '/field-checks.js') {
+    return serveStatic(res, resolve(__dirname, 'field-checks.js'), 'text/javascript; charset=utf-8');
+  }
+
   // Installer-Locale-Dateien. basename() neutralisiert Path-Traversal;
   // nur .json aus tools/installer/locales wird ausgeliefert.
   if (req.method === 'GET' && url.pathname.startsWith('/locales/') && url.pathname.endsWith('.json')) {
