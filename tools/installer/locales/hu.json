@@ -35,7 +35,8 @@
     "prereqLinkCompose": "podman-compose útmutató",
     "prereqRecheck": "Ellenőrzés újra",
     "errSecureOverHttp": "A nyilvános cím http://-tel kezdődik, ez a választás viszont biztonságos sütiket követel meg - így senki sem tud bejelentkezni. Válaszd a „Közvetlen hozzáférés\" lehetőséget, vagy használj https:// címet.",
-    "errTz": "Érvénytelen időzóna. IANA-név szükséges, például Europe/Berlin."
+    "errTz": "Érvénytelen időzóna. IANA-név szükséges, például Europe/Berlin.",
+    "errBaseUrlScheme": "A nyilvános címnek http:// vagy https:// előtaggal kell kezdődnie."
   },
   "secrets": {
     "title": "Biztonsági kulcsok",
@@ -47,7 +48,8 @@
     "errBoth": "Mindkét kulcs megadása kötelező.",
     "dangerWarn": "Mentsd el most ezeket a kulcsokat. Ha elveszíted őket, a titkosított adataid helyreállíthatatlanok — nincs visszaállítás. A beállítás végén letöltheted a .env fájlt mindkét kulccsal.",
     "preserved": "A meglévő kulcsaid megmaradnak, így ez a beállítás nem zár ki a jelenlegi adatbázisból. Hagyj egy mezőt üresen a kulcs megtartásához; új érték megadása lecseréli.",
-    "keepPlaceholder": "Meglévő kulcs megtartva"
+    "keepPlaceholder": "Meglévő kulcs megtartva",
+    "keepValuePlaceholder": "A jelenlegi érték megmarad"
   },
   "weather": {
     "title": "Időjárás widget",
@@ -299,8 +301,13 @@
     "subtitle": "Mindent előkészítettünk biztonságos alapértékekkel. Már csak a fiókodat kell létrehoznod.",
     "itemKeysTitle": "Biztonsági kulcsok létrehozva",
     "itemKeysDesc": "A munkameneted és az adatbázisod automatikusan titkosítva van.",
-    "itemAccessTitle": "Helyi hozzáférés",
-    "itemAccessDesc": "Elérhető itt: {{url}} ezen a gépen.",
+    "itemLanTitle": "Elérhető az otthoni hálózaton",
+    "itemLanDesc": "{{url}} - telefonról és tabletről is, ugyanazon a Wi-Fin.",
+    "itemLocalTitle": "Csak ezen az eszközön",
+    "itemLocalDesc": "{{url}} - az otthoni hálózat telefonjai így nem érik el a Yuvomit. A „Módosítás” alatt add meg ennek a számítógépnek a címét.",
+    "accessEdit": "Módosítás",
+    "accessDone": "Kész",
+    "hostLabel": "A számítógép címe az otthoni hálózaton",
     "itemBackupsTitle": "Napi biztonsági mentés bekapcsolva",
     "itemBackupsDesc": "Minden éjjel megőrzünk egy helyi biztonsági mentést.",
     "backupReminder": "A telepítés után mentsd el a létrehozott .env fájlt — ez tartalmazza az egyetlen titkosítási kulcsaidat.",

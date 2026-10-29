@@ -284,6 +284,20 @@
     .ready-item svg { width: 20px; height: 20px; flex-shrink: 0; stroke: var(--color-success); fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; margin-top: 1px; }
     .ready-item b { font-weight: 600; }
     .ready-item span { color: var(--color-text-secondary); }
+    /* Zugriffszeile des Einfach-Pfads: Titel und "Aendern" auf einer Linie,
+       die Adresse darunter, das Feld erst auf Wunsch. Ruhig wie die
+       Nachbarzeilen - der Knopf ist ein Textlink, kein zweiter Button. */
+    .ready-item__body { flex: 1 1 auto; min-width: 0; }
+    .ready-item__line { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+    /* Ohne Unterstrich (er ist hier Zeilenaktion, kein Fliesstext-Link), und die
+       Trefferflaeche waechst per Polster auf 44px, ohne die Zeile zu dehnen. */
+    .ready-item .ready-item__action { flex: 0 0 auto; text-decoration: none; padding-block: var(--space-3); margin-block: calc(-1 * var(--space-3)); }
+    .ready-item #simple-access-desc { display: block; overflow-wrap: anywhere; }
+    /* Adresse bleibt LTR, auch in ar/fa: http:// [Feld] :3000 ist ein Ausdruck. */
+    .simple-host-row { direction: ltr; display: flex; align-items: center; gap: var(--space-1); margin-top: var(--space-2); }
+    .simple-host-row[hidden] { display: none; }
+    .simple-host-row input { flex: 1 1 auto; min-width: 0; font-family: var(--font-mono); font-size: var(--text-sm); }
+    .ready-item .simple-host-affix { color: var(--color-text-tertiary); font-family: var(--font-mono); font-size: var(--text-sm); }
     .link-btn {
       background: none; border: none; padding: 0; font-family: var(--font-sans);
       font-size: var(--text-sm); font-weight: 600; color: var(--color-accent); cursor: pointer; text-decoration: underline;
@@ -1390,11 +1404,26 @@
           </div>
           <div class="ready-item">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg>
-            <!-- Kein data-i18n: der Wert trägt {{url}} und wird zur Laufzeit
-                 gesetzt. applyTranslations ruft t() ohne Parameter, hätte den
-                 Text beim Sprachwechsel also durch die Rohfassung ersetzt -
-                 sichtbar als „Erreichbar unter {{url}} auf diesem Gerät". -->
-            <div><b data-i18n="simple.itemAccessTitle">Local access</b><br><span id="simple-access-desc">Reachable at http://localhost:3000 on this machine.</span></div>
+            <!-- Kein data-i18n an Titel, Text und Knopf: sie haengen am Zustand
+                 (Heimnetz-Adresse gefunden oder nicht, Feld offen oder zu) und
+                 der Text traegt {{url}}. applyTranslations ruft t() ohne
+                 Parameter und haette beim Sprachwechsel die Rohfassung gesetzt;
+                 renderSimpleAccess() baut alle drei neu. -->
+            <div class="ready-item__body">
+              <div class="ready-item__line">
+                <b id="simple-access-title">Reachable on your home network</b>
+                <button type="button" class="link-btn ready-item__action" id="simple-access-edit"
+                        aria-expanded="false" aria-controls="simple-host-row">Change</button>
+              </div>
+              <span id="simple-access-desc">http://192.168.1.20:3000</span>
+              <div class="simple-host-row" id="simple-host-row" hidden>
+                <label class="vh" for="simple-host" data-i18n="simple.hostLabel">Address of this computer on your home network</label>
+                <span class="simple-host-affix" aria-hidden="true" dir="ltr">http://</span>
+                <input type="text" id="simple-host" dir="ltr" inputmode="url" autocapitalize="off"
+                       autocomplete="off" spellcheck="false" enterkeyhint="done" placeholder="192.168.1.20">
+                <span class="simple-host-affix" aria-hidden="true" dir="ltr">:3000</span>
+              </div>
+            </div>
           </div>
           <div class="ready-item">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 5 5L20 7"/></svg>
@@ -2490,6 +2519,7 @@
 // JS only: toggles active class, reads/writes input values, sets textContent.
 // No dynamic DOM generation. DOM API only (textContent, classList, style).
 import { initInstallerI18n, setLocale, getLocale, t, applyTranslations, applyRich } from '/i18n-mini.js';
+import { prefillPlan, accessEnv } from '/rerun-prefill.js';
 
 const $ = id => document.getElementById(id);
 
@@ -2617,7 +2647,9 @@ function localize() {
   // Der Abschluss-Untertitel haengt am Zustand, nicht nur an der Sprache.
   $('done-subtitle').textContent = t(adminExisted ? 'done.subtitleExisting' : 'done.subtitle');
   // Dasselbe für die Adresszeile des Einfach-Pfads ({{url}}).
-  if (wizardReady) $('simple-access-desc').textContent = t('simple.itemAccessDesc', { url: deriveBaseUrl() });
+  if (wizardReady) renderSimpleAccess();
+  // Platzhalter übernommener Secrets ("bisheriger Wert bleibt").
+  if (wizardReady) applyKeptPlaceholders();
   // Und fuer die Werte der Pruefseite: ihre Labels uebersetzt applyTranslations,
   // die Werte ("Neu erzeugt", "Direkt / HTTP") kommen aus renderReview - ohne
   // diesen Aufruf blieb der Kontrollschirm nach einem Sprachwechsel zweisprachig.
@@ -2784,6 +2816,49 @@ async function genSecret() {
  */
 const preservedKeys = new Set();
 
+/**
+ * Rerun: die nicht geheimen Werte der bestehenden .env (Allowlist, siehe
+ * RERUN_PREFILL_KEYS) oder null bei einer Erstinstallation. accessEnv() braucht
+ * sie, um SESSION_SECURE/TRUST_PROXY unverändert zu lassen, solange die
+ * Zugriffsart die übernommene bleibt.
+ */
+let rerunValues = null;
+/** Secrets, die in der .env stehen - nur die Namen, nie die Werte. */
+const keptSecrets = new Set();
+
+/** Ist dieses Secret vorhanden - eingetippt oder in der .env übernommen? */
+function hasSecret(key, typed) {
+  return Boolean(typed) || keptSecrets.has(key);
+}
+
+/**
+ * Die Felder mit dem Bestand vorbelegen (rerun-prefill.js rechnet den Plan).
+ * Schalter bekommen ein change-Ereignis, damit ihre Gruppen aufgehen wie bei
+ * einem Klick; Adresse und Zugriffsart gelten als gesetzt, sonst überschriebe
+ * die Ableitung aus Host und Port die übernommene BASE_URL sofort wieder.
+ */
+function applyRerunPrefill(plan) {
+  for (const [id, value] of Object.entries(plan.fields)) {
+    const el = $(id);
+    if (!el) continue;
+    if (typeof value === 'boolean') {
+      el.checked = value;
+      el.dispatchEvent(new Event('change'));
+    } else {
+      el.value = value;
+    }
+  }
+  for (const id of plan.touched) $(id).dataset.touched = '1';
+  keptFieldIds = plan.kept;
+  applyKeptPlaceholders();
+}
+
+/** Feld-IDs übernommener Secrets; localize() setzt ihren Platzhalter neu. */
+let keptFieldIds = [];
+function applyKeptPlaceholders() {
+  for (const id of keptFieldIds) $(id).placeholder = t('secrets.keepValuePlaceholder');
+}
+
 /** Beide Sicherheitsschlüssel erzeugen, falls noch nicht gesetzt. */
 async function ensureKeys() {
   await preflightDone;
@@ -2791,9 +2866,24 @@ async function ensureKeys() {
   if (!S.DB_ENCRYPTION_KEY && !preservedKeys.has('DB_ENCRYPTION_KEY')) S.DB_ENCRYPTION_KEY = await genSecret();
 }
 
-/** Sichere Defaults für den Einfach-Modus (lokaler HTTP-Zugriff, Backups an). */
+/**
+ * Die private IPv4 dieses Rechners im Heimnetz (/api/lan-address), oder null.
+ * Der Einfach-Pfad schrieb fest localhost: Einladungs- und Reset-Links zeigten
+ * auf das Gerät, auf dem man sie öffnet, und die Handys der Familie erreichten
+ * nichts - ausgerechnet im Pfad "für zu Hause".
+ */
+let lanAddress = null;
+const lanDone = (async () => {
+  try {
+    const r = await fetch('/api/lan-address');
+    if (r.ok) lanAddress = (await r.json()).address || null;
+  } catch { /* ohne Antwort bleibt es bei localhost */ }
+})();
+
+/** Sichere Defaults für den Einfach-Modus (HTTP im Heimnetz, Backups an). */
 function applySimpleDefaults() {
-  S.host = 'localhost';
+  // Eine Adresse, die der Nutzer selbst eingetragen hat, gewinnt.
+  S.host = simpleHostEdited ? S.host : (lanAddress || 'localhost');
   S.port = '3000';
   S.tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
   S.scheme = 'http';
@@ -2900,8 +2990,14 @@ const preflightDone = (async () => {
       // Client NICHT schickt. Ein zweiter Einfach-Lauf über eine Instanz hinter
       // einem Reverse-Proxy nahm ihr also unbemerkt die sicheren Cookies, das
       // Proxy-Vertrauen und die BASE_URL (Reset-Links zeigten danach auf
-      // localhost). Im Erweitert-Pfad steht jeder dieser Werte sichtbar im
-      // Formular, deshalb führt eine zweite Einrichtung dort entlang.
+      // localhost). Der Erweitert-Pfad belegt seine Felder dagegen mit den
+      // bestehenden Werten vor (applyRerunPrefill): was der Nutzer nicht
+      // anfasst, geht unverändert zurück. Das stimmte bis Oktober 2026 nicht -
+      // der Kommentar hier behauptete es, und jedes Feld startete mit seinem
+      // Default.
+      rerunValues = d.rerunValues || {};
+      for (const key of d.keptSecrets || []) keptSecrets.add(key);
+      applyRerunPrefill(prefillPlan(d.rerunValues || {}, d.keptSecrets || []));
       $('welcome-existing').style.display = 'block';
       simpleLockedByEnv = true;
       const simple = $('mode-simple');
@@ -3196,12 +3292,69 @@ document.addEventListener('input', refreshBadges);
 document.addEventListener('change', refreshBadges);
 
 /** Schritt-Eintritts-Hooks: was beim Anzeigen eines Schritts vorbereitet wird. */
+/** Ist das eine Adresse, die nur dieses Gerät selbst erreicht? */
+function isLoopbackHost(host) {
+  const h = (host || '').toLowerCase();
+  return !h || h === 'localhost' || h === '::1' || /^127\./.test(h);
+}
+
+/** Hat der Nutzer die Heimnetz-Adresse im Einfach-Pfad selbst geändert? */
+let simpleHostEdited = false;
+
+/**
+ * Die Zugriffszeile des Einfach-Pfads. Zwei ehrliche Fassungen: mit
+ * Heimnetz-Adresse "Erreichbar im Heimnetz", ohne sie "Nur auf diesem Gerät" -
+ * der alte Text "Lokaler Zugriff" sagte nicht, dass die Handys draussen bleiben.
+ */
+function renderSimpleAccess() {
+  const local = isLoopbackHost(S.host);
+  $('simple-access-title').textContent = t(local ? 'simple.itemLocalTitle' : 'simple.itemLanTitle');
+  $('simple-access-desc').textContent = t(local ? 'simple.itemLocalDesc' : 'simple.itemLanDesc', { url: deriveBaseUrl() });
+  const editing = !$('simple-host-row').hidden;
+  $('simple-access-edit').textContent = t(editing ? 'simple.accessDone' : 'simple.accessEdit');
+}
+
+$('simple-access-edit').addEventListener('click', () => {
+  const row = $('simple-host-row');
+  const open = row.hidden;
+  if (!open) {
+    // "Fertig" mit ungültiger Adresse: offen lassen und sagen, was fehlt.
+    if (!isValidHost($('simple-host').value.trim())) {
+      fail('simple-err', t('config.errHost'), 'simple-host');
+      return;
+    }
+    showErr('simple-err', '');
+  }
+  row.hidden = !open;
+  $('simple-access-edit').setAttribute('aria-expanded', String(open));
+  if (open) {
+    $('simple-host').value = S.host;
+    $('simple-host').focus();
+  } else {
+    $('simple-access-edit').focus();
+  }
+  renderSimpleAccess();
+});
+
+$('simple-host').addEventListener('input', e => {
+  const v = e.target.value.trim();
+  simpleHostEdited = true;
+  if (isValidHost(v)) {
+    S.host = v;
+    e.target.removeAttribute('aria-invalid');
+  }
+  renderSimpleAccess();
+});
+$('simple-host').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); $('simple-access-edit').click(); }
+});
+
 function onEnterStep(name) {
   if (name === 'secrets') {
     autofillSecretFields();
   } else if (name === 'simple') {
     ensureKeys();
-    $('simple-access-desc').textContent = t('simple.itemAccessDesc', { url: deriveBaseUrl() });
+    renderSimpleAccess();
     // Bestätigungszustand zurücksetzen, falls der Nutzer erneut hierher navigiert.
     simpleConfirmed = false;
     $('simple-next').textContent = t('simple.start');
@@ -3383,6 +3536,8 @@ async function startFlow(m) {
   const request = ++flowRequest;
   if (m === 'simple') {
     await preflightDone;
+    // Die Einfach-Defaults unten brauchen die Heimnetz-Adresse.
+    await lanDone;
     if (request !== flowRequest) return;
     if (simpleLockedByEnv) m = 'advanced';
   }
@@ -3596,11 +3751,16 @@ document.addEventListener('click', async e => {
   }
 });
 
+/** Hostname oder IPv4, wie ihn Basis- und Einfach-Pfad annehmen. */
+function isValidHost(host) {
+  return /^[a-zA-Z0-9]([a-zA-Z0-9\-\.]*[a-zA-Z0-9])?$/.test(host);
+}
+
 $('cfg-next').addEventListener('click', () => {
   clearInvalid();
   const rawHost = $('cfg-host').value.trim() || 'localhost';
   const rawPort = parseInt($('cfg-port').value.trim(), 10);
-  if (!/^[a-zA-Z0-9]([a-zA-Z0-9\-\.]*[a-zA-Z0-9])?$/.test(rawHost) && rawHost !== 'localhost') {
+  if (!isValidHost(rawHost)) {
     fail('cfg-err', t('config.errHost'), 'cfg-host');
     return;
   }
@@ -3626,14 +3786,22 @@ $('cfg-next').addEventListener('click', () => {
   // Steht seit dem Umzug hier statt in adv-next: die Entscheidung gehoert zu
   // "Wie greifst du auf Yuvomi zu?", und alles Weitere (Schema, BASE_URL, die
   // Redirect-URIs im Kalenderschritt) haengt daran.
-  if ($('adv-proxy').value === 'direct') {
-    S.SESSION_SECURE = 'false';     // allow login cookies over plain HTTP
-    S.TRUST_PROXY = 'loopback';
-  } else {
-    S.SESSION_SECURE = 'true';      // enforce secure cookies behind the proxy
-    S.TRUST_PROXY = '1';            // trust one proxy hop (Caddy/nginx/Traefik)
+  // Direkt: Cookies über plain HTTP, TRUST_PROXY=loopback. Proxy: sichere
+  // Cookies, ein Proxy-Hop (Caddy/nginx/Traefik). Beim Rerun mit unveränderter
+  // Wahl gehen die bestehenden Werte zurück (accessEnv, rerun-prefill.js).
+  const choice = $('adv-proxy').value;
+  Object.assign(S, accessEnv(choice, rerunValues));
+  S.scheme = choice === 'direct' ? 'http' : 'https';
+
+  // Eine Adresse ohne http(s):// fiel in plannedOrigin() still weg, und in die
+  // .env ging die Ableitung aus Host und Port - eine Adresse, die auf keinem
+  // Bildschirm stand.
+  const typedBase = $('adv-base-url');
+  const typedBaseVal = typedBase.value.trim();
+  if (typedBase.dataset.touched && typedBaseVal && !/^https?:\/\/[^/\s]+/.test(typedBaseVal)) {
+    fail('cfg-err', t('config.errBaseUrlScheme'), 'adv-base-url');
+    return;
   }
-  S.scheme = S.SESSION_SECURE === 'true' ? 'https' : 'http';
   S.BASE_URL = plannedOrigin();
 
   // Der eine Widerspruch, der garantiert die Anmeldung bricht: die oeffentliche
@@ -3642,7 +3810,7 @@ $('cfg-next').addEventListener('click', () => {
   // erst nach der ganzen Installation, wenn niemand mehr hier sucht.
   // Geprueft wird die WIRKUNG (das Paar aus Adresse und Cookie-Flag), nicht die
   // Auswahl im Select: dieselbe Kombination kann auf drei Wegen entstehen.
-  if (S.SESSION_SECURE === 'true' && S.BASE_URL.startsWith('http://')) {
+  if (choice === 'proxy' && S.BASE_URL.startsWith('http://')) {
     fail('cfg-err', t('config.errSecureOverHttp'), 'adv-proxy');
     return;
   }
@@ -3682,7 +3850,9 @@ $('wea-next').addEventListener('click', () => {
     S.WEATHER_CITY  = $('wea-city').value.trim();
     S.WEATHER_UNITS = $('wea-units').value;
   } else {
-    S.WEATHER_LAT = ''; S.WEATHER_LON = ''; S.WEATHER_CITY = ''; S.WEATHER_UNITS = 'metric';
+    // Leer statt 'metric': ein abgeschaltetes Wetter schrieb sonst beim Rerun
+    // still metrische Einheiten über eingestellte imperiale.
+    S.WEATHER_LAT = ''; S.WEATHER_LON = ''; S.WEATHER_CITY = ''; S.WEATHER_UNITS = '';
   }
   showErr('wea-err', '');
   next();
@@ -3846,12 +4016,16 @@ $('storage-next').addEventListener('click', () => {
   const driveEnabled = $('adv-document-google-drive-enable').checked;
   const driveClientId = $('adv-document-google-drive-client-id').value.trim();
   const driveClientSecret = $('adv-document-google-drive-client-secret').value;
-  if (driveEnabled && Boolean(driveClientId) !== Boolean(driveClientSecret)) {
+  // Ein in der .env übernommenes Secret zählt als vorhanden (hasSecret): sein
+  // Feld bleibt beim Rerun bewusst leer.
+  const driveSecretSet = hasSecret('GOOGLE_DRIVE_CLIENT_SECRET', driveClientSecret);
+  if (driveEnabled && Boolean(driveClientId) !== driveSecretSet) {
     fail('storage-err', t('advanced.errDocumentGoogleDrivePair'),
       driveClientId ? 'adv-document-google-drive-client-secret' : 'adv-document-google-drive-client-id');
     return;
   }
-  if (driveEnabled && !(driveClientId && driveClientSecret) && !(S.GOOGLE_CLIENT_ID && S.GOOGLE_CLIENT_SECRET)) {
+  if (driveEnabled && !(driveClientId && driveSecretSet)
+    && !(S.GOOGLE_CLIENT_ID && hasSecret('GOOGLE_CLIENT_SECRET', S.GOOGLE_CLIENT_SECRET))) {
     fail('storage-err', t('advanced.errDocumentGoogleDriveCredentials'), 'adv-document-google-drive-client-id');
     return;
   }
@@ -3933,7 +4107,9 @@ $('adv-next').addEventListener('click', () => {
     OIDC_CLIENT_ID: $('oidc-client-id').value.trim(),
     OIDC_CLIENT_SECRET: $('oidc-client-secret').value.trim(),
   };
-  const coreFilled = Object.values(oidcCore).filter(Boolean).length;
+  // Das Client-Secret zählt auch, wenn es aus der .env übernommen wird.
+  const coreFilled = [oidcCore.OIDC_ISSUER, oidcCore.OIDC_CLIENT_ID,
+    hasSecret('OIDC_CLIENT_SECRET', oidcCore.OIDC_CLIENT_SECRET)].filter(Boolean).length;
   if (coreFilled > 0 && coreFilled < 3) {
     const firstEmpty = !oidcCore.OIDC_ISSUER ? 'oidc-issuer'
       : !oidcCore.OIDC_CLIENT_ID ? 'oidc-client-id' : 'oidc-client-secret';
@@ -4116,6 +4292,13 @@ $('simple-next').addEventListener('click', async () => {
   await preflightDone;
   if (simpleLockedByEnv) { startFlow('advanced'); return; }
   const btn = $('simple-next');
+  // Eine halb getippte Adresse darf nicht in die .env: S.host folgt nur
+  // gültigen Eingaben, das Feld zeigt aber, was dasteht.
+  clearInvalid($('step-simple'));
+  if (!$('simple-host-row').hidden && !isValidHost($('simple-host').value.trim())) {
+    fail('simple-err', t('config.errHost'), 'simple-host');
+    return;
+  }
   // Genauso irreversibel wie rev-next, also dieselbe Zwei-Klick-Bestätigung.
   // Dass der Laien-Pfad sie nicht hatte, drehte die Schutzlogik um: weniger
   // Netz für die Nutzer, die weniger überblicken.

@@ -35,7 +35,8 @@
     "prereqLinkCompose": "The podman-compose guide",
     "prereqRecheck": "Check again",
     "errSecureOverHttp": "The public address starts with http://, but this choice enforces secure cookies - nobody can sign in that way. Pick \"Direct access\" or use an https:// address.",
-    "errTz": "Invalid timezone. Expected an IANA name like Europe/Berlin."
+    "errTz": "Invalid timezone. Expected an IANA name like Europe/Berlin.",
+    "errBaseUrlScheme": "The public address must start with http:// or https://."
   },
   "secrets": {
     "title": "Security Keys",
@@ -47,7 +48,8 @@
     "errBoth": "Both keys are required.",
     "dangerWarn": "Save these keys now. If you lose them, your encrypted data is unrecoverable - there is no reset. At the end of setup you can download the .env file with both keys.",
     "preserved": "Your existing keys are kept, so this setup will not lock you out of the current database. Leave a field empty to keep its key; entering a new value replaces it.",
-    "keepPlaceholder": "Existing key kept"
+    "keepPlaceholder": "Existing key kept",
+    "keepValuePlaceholder": "Current value is kept"
   },
   "weather": {
     "title": "Weather Widget",
@@ -299,8 +301,13 @@
     "subtitle": "We've prepared everything with safe defaults. Just create your account next.",
     "itemKeysTitle": "Security keys generated",
     "itemKeysDesc": "Your session and database are encrypted automatically.",
-    "itemAccessTitle": "Local access",
-    "itemAccessDesc": "Reachable at {{url}} on this machine.",
+    "itemLanTitle": "Reachable on your home network",
+    "itemLanDesc": "{{url}} - also from phones and tablets on the same Wi-Fi.",
+    "itemLocalTitle": "Only on this device",
+    "itemLocalDesc": "{{url}} - phones on your home network can't reach Yuvomi this way. Use “Change” to enter this computer's address.",
+    "accessEdit": "Change",
+    "accessDone": "Done",
+    "hostLabel": "Address of this computer on your home network",
     "itemBackupsTitle": "Daily backups on",
     "itemBackupsDesc": "A local backup is kept every night.",
     "backupReminder": "After setup, back up the generated .env file - it holds your only encryption keys.",

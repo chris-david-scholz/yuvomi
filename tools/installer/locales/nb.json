@@ -35,7 +35,8 @@
     "prereqLinkCompose": "podman-compose-veiledning",
     "prereqRecheck": "Sjekk på nytt",
     "errSecureOverHttp": "Den offentlige adressen starter med http://, men dette valget krever sikre informasjonskapsler - ingen kan logge inn på den måten. Velg \"Direkte tilgang\" eller bruk en https://-adresse.",
-    "errTz": "Ugyldig tidssone. Forventet et IANA-navn som Europe/Oslo."
+    "errTz": "Ugyldig tidssone. Forventet et IANA-navn som Europe/Oslo.",
+    "errBaseUrlScheme": "Den offentlige adressen må starte med http:// eller https://."
   },
   "secrets": {
     "title": "Sikkerhetsnøkler",
@@ -47,7 +48,8 @@
     "errBoth": "Begge nøklene er påkrevd.",
     "dangerWarn": "Lagre disse nøklene nå. Hvis du mister dem, kan ikke krypterte data gjenopprettes - det finnes ingen tilbakestilling. Ved slutten av oppsettet kan du laste ned .env-filen med begge nøklene.",
     "preserved": "Dine eksisterende nøkler beholdes, så dette oppsettet vil ikke låse deg ute fra den nåværende databasen. La et felt være tomt for å beholde dets nøkkel; å skrive inn en ny verdi erstatter den.",
-    "keepPlaceholder": "Eksisterende nøkkel beholdt"
+    "keepPlaceholder": "Eksisterende nøkkel beholdt",
+    "keepValuePlaceholder": "Nåværende verdi beholdes"
   },
   "weather": {
     "title": "Vær-widget",
@@ -299,8 +301,13 @@
     "subtitle": "Vi har forberedt alt med trygge standardinnstillinger. Opprett kontoen din som neste steg.",
     "itemKeysTitle": "Sikkerhetsnøkler generert",
     "itemKeysDesc": "Sesjonen din og databasen din blir kryptert automatisk.",
-    "itemAccessTitle": "Lokal tilgang",
-    "itemAccessDesc": "Tilgjengelig på {{url}} på denne maskinen.",
+    "itemLanTitle": "Tilgjengelig i hjemmenettverket",
+    "itemLanDesc": "{{url}} - også fra mobiler og nettbrett på samme wifi.",
+    "itemLocalTitle": "Bare på denne enheten",
+    "itemLocalDesc": "{{url}} - mobiler i hjemmenettverket når ikke Yuvomi slik. Skriv inn datamaskinens adresse under «Endre».",
+    "accessEdit": "Endre",
+    "accessDone": "Ferdig",
+    "hostLabel": "Datamaskinens adresse i hjemmenettverket",
     "itemBackupsTitle": "Daglige sikkerhetskopier på",
     "itemBackupsDesc": "En lokal sikkerhetskopi lagres hver natt.",
     "backupReminder": "Etter oppsett, ta sikkerhetskopi av den genererte .env-filen - den inneholder de eneste krypteringsnøklene dine.",

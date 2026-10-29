@@ -10,9 +10,11 @@ import { readFileSync, writeFileSync, existsSync, copyFileSync } from 'node:fs';
 import { spawn } from 'node:child_process';
 import { EventEmitter } from 'node:events';
 import { randomBytes } from 'node:crypto';
+import { networkInterfaces } from 'node:os';
 import { resolve, dirname, basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ENV_SCHEMA } from './env-schema.js';
+import { RERUN_PREFILL_KEYS, RERUN_SECRET_KEYS } from './env-schema.js';
 import { SUPPORTED_LOCALES as INSTALLER_LOCALES } from './i18n-mini.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -205,6 +207,69 @@ export function preserveUnmanagedLines(envPath, written) {
  * hat der Nutzer ihn im Experten-Modus bewusst eingetragen.
  */
 export const PRESERVED_KEYS = ['SESSION_SECRET', 'DB_ENCRYPTION_KEY'];
+
+/**
+ * Was der Wizard bei einem Rerun aus der bestehenden .env erfahren darf.
+ *
+ * `rerunValues`: die Werte der Allowlist RERUN_PREFILL_KEYS, sonst nichts - also
+ * nie ein Secret, auch keins, dessen Name zufällig unauffällig ist.
+ * `keptSecrets`: nur die NAMEN der Secrets, die in der Datei stehen. Damit kann
+ * der Wizard "bestehender bleibt" anzeigen und Paarprüfungen (Client-ID ohne
+ * Secret) bestehen lassen, ohne den Wert je zu sehen.
+ */
+export function rerunSnapshot(existingEnv) {
+  const rerunValues = {};
+  for (const key of RERUN_PREFILL_KEYS) {
+    if (existingEnv[key]) rerunValues[key] = existingEnv[key];
+  }
+  const keptSecrets = RERUN_SECRET_KEYS.filter(key => Boolean(existingEnv[key]));
+  return { rerunValues, keptSecrets };
+}
+
+/**
+ * Schnittstellen, über die ein Handy im Heimnetz den Host NICHT erreicht:
+ * Container-Bridges (Docker, Podman, libvirt, LXC, Kubernetes-CNI), VMs und
+ * VPN-Tunnel. Deren Adressen sind oft ebenfalls RFC 1918 (docker0 172.17.0.1,
+ * WireGuard 10.x) und sähen sonst genauso gut aus wie das echte LAN.
+ */
+const VIRTUAL_INTERFACE = /^(docker|br-|veth|virbr|vnet|vmnet|vboxnet|vethernet|utun|tun|tap|wg|tailscale|zt|ppp|ipsec|cni|flannel|cali|cilium|lxc|lxd|podman|kube|awdl|llw|bridge|anpi|ap\d)/i;
+
+/** Rang einer privaten IPv4: 192.168/16 vor 10/8 vor 172.16/12, sonst null. */
+function privateRank(address) {
+  if (/^192\.168\./.test(address)) return 0;
+  if (/^10\./.test(address)) return 1;
+  // 172.17.0.0/16 ist Dockers Standard-Bridge; heisst sie anders als docker0
+  // (Rootless, umbenannt), soll sie trotzdem hinter allem anderen stehen.
+  if (/^172\.17\./.test(address)) return 3;
+  if (/^172\.(1[6-9]|2\d|3[01])\./.test(address)) return 2;
+  return null;
+}
+
+/**
+ * Die Adresse, unter der Handys und Tablets im Heimnetz diesen Rechner
+ * erreichen - oder null.
+ *
+ * Der Einfach-Pfad schrieb BASE_URL=http://localhost:3000: Einladungs- und
+ * Reset-Links zeigten damit auf das Gerät, auf dem man sie öffnet, und die
+ * Fertig-Seite empfahl, die App "auf den Handys" zu installieren, die sie nie
+ * erreichen konnten. Nur private IPv4 (RFC 1918), keine internen Adressen und
+ * keine virtuellen Schnittstellen. `interfaces` ist injizierbar, damit die Wahl
+ * ohne das Netz des Testrechners prüfbar ist.
+ */
+export function pickLanAddress(interfaces = networkInterfaces()) {
+  let best = null;
+  for (const [name, addrs] of Object.entries(interfaces || {})) {
+    if (VIRTUAL_INTERFACE.test(name)) continue;
+    for (const a of addrs || []) {
+      const v4 = a.family === 'IPv4' || a.family === 4;
+      if (!v4 || a.internal) continue;
+      const rank = privateRank(a.address);
+      if (rank === null) continue;
+      if (!best || rank < best.rank) best = { rank, address: a.address };
+    }
+  }
+  return best ? best.address : null;
+}
 
 /**
  * Resolve true/false for whether a command can be spawned successfully.
@@ -598,6 +663,11 @@ async function route(req, res, server) {
     return serveStatic(res, resolve(__dirname, 'i18n-mini.js'), 'text/javascript; charset=utf-8');
   }
 
+  // Vorbelegung beim Rerun (reine Funktionen, siehe rerun-prefill.js).
+  if (req.method === 'GET' && url.pathname === '/rerun-prefill.js') {
+    return serveStatic(res, resolve(__dirname, 'rerun-prefill.js'), 'text/javascript; charset=utf-8');
+  }
+
   // Installer-Locale-Dateien. basename() neutralisiert Path-Traversal;
   // nur .json aus tools/installer/locales wird ausgeliefert.
   if (req.method === 'GET' && url.pathname.startsWith('/locales/') && url.pathname.endsWith('.json')) {
@@ -628,9 +698,12 @@ async function route(req, res, server) {
       // Nur die NAMEN der vorhandenen Schlüssel - die Werte bleiben auf dem
       // Server. Das Frontend erzeugt für diese keinen neuen Wert mehr.
       const preservedKeys = PRESERVED_KEYS.filter(key => Boolean(existingEnv[key]));
+      // Die nicht geheimen Werte (Allowlist) für die Vorbelegung, von den
+      // Secrets nur die Namen - siehe rerunSnapshot().
+      const { rerunValues, keptSecrets } = rerunSnapshot(existingEnv);
       // Mit Zeitlimit: der Wizard wartet auf diese Antwort (siehe probeContainerRunning).
       const containerRunning = await probeContainerRunning();
-      return json(res, 200, { envExists, preservedKeys, containerRunning });
+      return json(res, 200, { envExists, preservedKeys, rerunValues, keptSecrets, containerRunning });
     } catch (err) {
       return json(res, 500, { error: err.message });
     }
@@ -652,6 +725,13 @@ async function route(req, res, server) {
    * und über dieselbe Loopback-Schranke wie jede andere API-Route; in den
    * JS-Zustand der Seite gelangen sie weiterhin nicht.
    */
+  // Die Heimnetz-Adresse fuer den Einfach-Pfad (siehe pickLanAddress). Der
+  // Installer selbst lauscht weiter nur auf 127.0.0.1; die App-Container binden
+  // per Compose auf 0.0.0.0 und sind damit unter dieser Adresse erreichbar.
+  if (req.method === 'GET' && url.pathname === '/api/lan-address') {
+    return json(res, 200, { address: pickLanAddress() });
+  }
+
   if (req.method === 'GET' && url.pathname === '/api/env-file') {
     try {
       const envPath = resolve(projectRoot(), '.env');

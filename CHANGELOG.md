@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- **Running the web installer again keeps your settings.** On an existing installation the advanced
+  setup now fills its fields with the values from your `.env` - port, public address, reverse-proxy
+  settings, timezone, weather, email, sign-on, storage and backups - so a second run no longer resets
+  them to defaults when you only wanted to add something. A hand-tuned `TRUST_PROXY=2` stays as long
+  as you keep the pre-selected access choice, and the review page shows the kept values instead of
+  "Not set up". Passwords, client secrets and keys never reach the browser: their fields stay empty
+  with the note "Current value is kept", and the existing values are written back.
+- **The simple setup makes Yuvomi reachable on your home network.** It used to write
+  `http://localhost:3000` as the address, so invitation and password-reset links and the app on
+  your phones pointed at a device that could not be reached. It now uses this computer's address on
+  the home network (for example `http://192.168.1.20:3000`), skips Docker bridges and VPN tunnels when
+  looking for it, and lets you change it with "Change". If it finds none, it says plainly that Yuvomi
+  is then reachable only on this computer.
+- **A public address without `http://` or `https://` is refused in the installer** instead of being
+  silently replaced by an address derived from host and port.
+
 ## [2.83.0] - 2026-10-29
 
 ### Added

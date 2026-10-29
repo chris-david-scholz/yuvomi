@@ -35,7 +35,8 @@
     "prereqLinkCompose": "La guía de podman-compose",
     "prereqRecheck": "Comprobar de nuevo",
     "errSecureOverHttp": "La dirección pública empieza por http://, pero esta opción exige cookies seguras: así nadie puede iniciar sesión. Elige «Acceso directo» o usa una dirección https://.",
-    "errTz": "Zona horaria no válida. Se espera un nombre IANA como Europe/Berlin."
+    "errTz": "Zona horaria no válida. Se espera un nombre IANA como Europe/Berlin.",
+    "errBaseUrlScheme": "La dirección pública debe empezar por http:// o https://."
   },
   "secrets": {
     "title": "Claves de seguridad",
@@ -47,7 +48,8 @@
     "errBoth": "Ambas claves son obligatorias.",
     "dangerWarn": "Guarda estas claves ahora. Si las pierdes, tus datos cifrados serán irrecuperables: no hay forma de restablecerlas. Al final de la configuración podrás descargar el archivo .env con ambas claves.",
     "preserved": "Se conservan tus claves existentes, por lo que esta configuración no te bloqueará el acceso a la base de datos actual. Deja un campo vacío para conservar su clave; introducir un valor nuevo la reemplaza.",
-    "keepPlaceholder": "Se conserva la clave existente"
+    "keepPlaceholder": "Se conserva la clave existente",
+    "keepValuePlaceholder": "Se conserva el valor actual"
   },
   "weather": {
     "title": "Widget de clima",
@@ -299,8 +301,13 @@
     "subtitle": "Lo hemos preparado todo con valores seguros. Solo falta crear tu cuenta.",
     "itemKeysTitle": "Claves de seguridad generadas",
     "itemKeysDesc": "Tu sesión y tu base de datos se cifran automáticamente.",
-    "itemAccessTitle": "Acceso local",
-    "itemAccessDesc": "Accesible en {{url}} desde este equipo.",
+    "itemLanTitle": "Accesible en tu red doméstica",
+    "itemLanDesc": "{{url}} - también desde móviles y tabletas en la misma wifi.",
+    "itemLocalTitle": "Solo en este dispositivo",
+    "itemLocalDesc": "{{url}} - los móviles de tu red doméstica no pueden acceder a Yuvomi así. Con «Cambiar» introduces la dirección de este ordenador.",
+    "accessEdit": "Cambiar",
+    "accessDone": "Listo",
+    "hostLabel": "Dirección de este ordenador en tu red doméstica",
     "itemBackupsTitle": "Copias diarias activadas",
     "itemBackupsDesc": "Cada noche se conserva una copia local.",
     "backupReminder": "Tras la instalación, haz una copia del archivo .env generado: contiene tus únicas claves de cifrado.",

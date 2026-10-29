@@ -35,7 +35,8 @@
     "prereqLinkCompose": "Návod pro podman-compose",
     "prereqRecheck": "Zkusit znovu",
     "errSecureOverHttp": "Veřejná adresa začíná na http://, ale tato volba vynucuje zabezpečené cookies - přihlášení pak není možné. Zvol „Přímý přístup\" nebo použij adresu https://.",
-    "errTz": "Neplatné časové pásmo. Očekává se název IANA, např. Europe/Berlin."
+    "errTz": "Neplatné časové pásmo. Očekává se název IANA, např. Europe/Berlin.",
+    "errBaseUrlScheme": "Veřejná adresa musí začínat http:// nebo https://."
   },
   "secrets": {
     "title": "Bezpečnostní klíče",
@@ -47,7 +48,8 @@
     "errBoth": "Oba klíče jsou povinné.",
     "dangerWarn": "Uložte tyto klíče hned. Pokud je ztratíte, vaše šifrovaná data budou nenávratně ztracena — neexistuje žádné obnovení. Na konci instalace si můžete stáhnout soubor .env s oběma klíči.",
     "preserved": "Vaše stávající klíče zůstanou zachovány, takže vás tato instalace neodřízne od současné databáze. Nechte pole prázdné, aby se klíč zachoval; zadání nové hodnoty jej nahradí.",
-    "keepPlaceholder": "Stávající klíč zachován"
+    "keepPlaceholder": "Stávající klíč zachován",
+    "keepValuePlaceholder": "Stávající hodnota zůstane zachována"
   },
   "weather": {
     "title": "Widget počasí",
@@ -299,8 +301,13 @@
     "subtitle": "Vše jsme připravili s bezpečnými výchozími hodnotami. Nyní stačí vytvořit účet.",
     "itemKeysTitle": "Bezpečnostní klíče vygenerovány",
     "itemKeysDesc": "Vaše relace a databáze se šifrují automaticky.",
-    "itemAccessTitle": "Místní přístup",
-    "itemAccessDesc": "Dostupné na {{url}} na tomto zařízení.",
+    "itemLanTitle": "Dostupné v domácí síti",
+    "itemLanDesc": "{{url}} - i z telefonů a tabletů ve stejné Wi-Fi.",
+    "itemLocalTitle": "Jen na tomto zařízení",
+    "itemLocalDesc": "{{url}} - telefony v domácí síti se takto k Yuvomi nedostanou. Přes „Změnit“ zadáte adresu tohoto počítače.",
+    "accessEdit": "Změnit",
+    "accessDone": "Hotovo",
+    "hostLabel": "Adresa tohoto počítače v domácí síti",
     "itemBackupsTitle": "Denní zálohy zapnuty",
     "itemBackupsDesc": "Každou noc se uchová místní záloha.",
     "backupReminder": "Po nastavení zálohujte vygenerovaný soubor .env — obsahuje vaše jediné šifrovací klíče.",

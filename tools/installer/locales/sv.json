@@ -35,7 +35,8 @@
     "prereqLinkCompose": "podman-compose-guiden",
     "prereqRecheck": "Kontrollera igen",
     "errSecureOverHttp": "Den publika adressen börjar med http://, men det här valet kräver säkra kakor - då kan ingen logga in. Välj \"Direktåtkomst\" eller använd en https://-adress.",
-    "errTz": "Ogiltig tidszon. En IANA-beteckning som Europe/Berlin förväntas."
+    "errTz": "Ogiltig tidszon. En IANA-beteckning som Europe/Berlin förväntas.",
+    "errBaseUrlScheme": "Den offentliga adressen måste börja med http:// eller https://."
   },
   "secrets": {
     "title": "Säkerhetsnycklar",
@@ -47,7 +48,8 @@
     "errBoth": "Båda nycklarna krävs.",
     "dangerWarn": "Spara dessa nycklar nu. Om du förlorar dem går dina krypterade data inte att återställa — det finns ingen återställning. I slutet av installationen kan du ladda ner .env-filen med båda nycklarna.",
     "preserved": "Dina befintliga nycklar behålls, så den här installationen låser dig inte ute från den nuvarande databasen. Lämna ett fält tomt för att behålla dess nyckel; ett nytt värde ersätter den.",
-    "keepPlaceholder": "Befintlig nyckel behålls"
+    "keepPlaceholder": "Befintlig nyckel behålls",
+    "keepValuePlaceholder": "Nuvarande värde behålls"
   },
   "weather": {
     "title": "Väder-widget",
@@ -299,8 +301,13 @@
     "subtitle": "Vi har förberett allt med säkra standardvärden. Skapa bara ditt konto härnäst.",
     "itemKeysTitle": "Säkerhetsnycklar genererade",
     "itemKeysDesc": "Din session och databas krypteras automatiskt.",
-    "itemAccessTitle": "Lokal åtkomst",
-    "itemAccessDesc": "Nås på {{url}} på den här datorn.",
+    "itemLanTitle": "Nåbar i hemnätverket",
+    "itemLanDesc": "{{url}} - även från mobiler och surfplattor i samma wifi.",
+    "itemLocalTitle": "Endast på den här enheten",
+    "itemLocalDesc": "{{url}} - mobiler i hemnätverket når inte Yuvomi så här. Ange datorns adress via ”Ändra”.",
+    "accessEdit": "Ändra",
+    "accessDone": "Klar",
+    "hostLabel": "Datorns adress i hemnätverket",
     "itemBackupsTitle": "Dagliga säkerhetskopior på",
     "itemBackupsDesc": "En lokal säkerhetskopia sparas varje natt.",
     "backupReminder": "Säkerhetskopiera den genererade .env-filen efter installationen — den innehåller dina enda krypteringsnycklar.",

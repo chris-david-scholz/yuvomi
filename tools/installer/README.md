@@ -37,11 +37,22 @@ dedicated `podman-compose.yml` (SELinux `:Z` labels).
    is briefly cut off. When it finds an existing `.env`, the **simple
    path is disabled** and you continue with the advanced setup: the simple path writes
    fixed values for host, port, `SESSION_SECURE` and `TRUST_PROXY`, which would
-   silently downgrade an installation that already runs behind a reverse proxy
+   silently downgrade an installation that already runs behind a reverse proxy.
+   The advanced setup pre-fills its fields from that `.env` instead: `/api/preflight`
+   returns the non-secret values on the explicit allowlist `RERUN_PREFILL_KEYS`
+   (`env-schema.js`) and, for secrets, only the names (`keptSecrets`). Values you
+   leave untouched are written back unchanged, `SESSION_SECURE`/`TRUST_PROXY` stay as
+   they were while the exposure choice is the pre-selected one, and secret fields
+   stay empty ("Current value is kept") so the server restores their existing lines
 2. Lets you pick a setup path on the welcome screen:
    - **Simple setup** (recommended for non-technical users) — auto-generates the
-     security keys, applies safe localhost/HTTP defaults, and goes straight to
-     creating your admin account. Two or three clicks, no jargon.
+     security keys, applies safe HTTP defaults, and goes straight to
+     creating your admin account. Two or three clicks, no jargon. The address
+     it writes (`BASE_URL`) is this computer's private IPv4 on the home network
+     (`GET /api/lan-address`, skipping Docker/Podman bridges and VPN tunnels such as
+     `docker0`, `br-*`, `utun*`, `wg*`), so invitation and reset links work on the
+     family's phones; "Change" on the summary screen edits it. Without such an
+     address the summary says it is reachable on this device only (`localhost`).
    - **Advanced setup** — walks every option, step by step. Security keys are
      still pre-generated (regenerate any time), and each screen is optional:
      - **Basics** - domain/IP, HTTP host port (`OIKOS_HTTP_PORT`), timezone (`TZ`,
@@ -211,13 +222,19 @@ double-click cannot pass both confirmation stages at once.
   and any Origin/Referer are loopback, guarding against DNS-rebinding/CSRF while
   the installer runs. Endpoints:
   `GET /api/defaults` (serves `ENV_SCHEMA`), `GET /api/prereqs`,
-  `GET /api/preflight` (existing `.env` / running container),
+  `GET /api/preflight` (existing `.env` / running container, plus the
+  allowlisted non-secret values and the names of kept secrets for a re-run),
+  `GET /api/lan-address` (the private home-network IPv4 for the simple path),
   `POST /api/generate-secret`, `POST /api/save-env` (returns the written path),
   `POST /api/start`, `GET /api/status`, `POST /api/create-admin`,
   `GET /api/env-file` (serves the written `.env` for the final download - same
   loopback guard, since the file carries the encryption keys).
 - `env-schema.js` — the single source of truth (`ENV_SCHEMA`) for every
   configurable variable, its group, default, and whether it is written to `.env`.
+- `rerun-prefill.js` — pure functions that turn the re-run values from
+  `/api/preflight` into field pre-fills (`prefillPlan`) and keep `SESSION_SECURE`/
+  `TRUST_PROXY` while the exposure choice is unchanged (`accessEnv`); served to the
+  page and tested without a browser.
 - `i18n-mini.js` + `locales/*.json` — web-wizard localization.
 - `locales/cli/*.sh` — CLI-installer localization (sourced by `install.sh`).
 - `install.html` — the wizard UI.

@@ -35,7 +35,8 @@
     "prereqLinkCompose": "Ang gabay sa podman-compose",
     "prereqRecheck": "Suriin muli",
     "errSecureOverHttp": "Nagsisimula sa http:// ang pampublikong address, pero pinipilit ng piniling ito ang secure cookies - hindi makakapag-sign in ang sinuman. Piliin ang \"Direktang access\" o gumamit ng https:// address.",
-    "errTz": "Hindi wastong time zone. Inaasahan ang isang IANA na pangalan tulad ng Europe/Berlin."
+    "errTz": "Hindi wastong time zone. Inaasahan ang isang IANA na pangalan tulad ng Europe/Berlin.",
+    "errBaseUrlScheme": "Dapat magsimula ang public address sa http:// o https://."
   },
   "secrets": {
     "title": "Mga Susi sa Seguridad",
@@ -47,7 +48,8 @@
     "errBoth": "Kailangan ang dalawang susi.",
     "dangerWarn": "I-save ang mga susing ito ngayon. Kapag nawala sila, hindi na mababawi ang iyong naka-encrypt na datos - walang pag-reset. Sa pagtatapos ng setup, maaari mong i-download ang .env file na naglalaman ng dalawang susi.",
     "preserved": "Napapanatili ang iyong mga umiiral na susi, kaya hindi ka isasara ng setup na ito sa kasalukuyang database. Iwanang blangko ang field para panatilihin ang susi nito; pinapalitan ito ng bagong halaga.",
-    "keepPlaceholder": "Napanatili ang umiiral na susi"
+    "keepPlaceholder": "Napanatili ang umiiral na susi",
+    "keepValuePlaceholder": "Pinapanatili ang kasalukuyang value"
   },
   "weather": {
     "title": "Widget ng Panahon",
@@ -299,8 +301,13 @@
     "subtitle": "Inihanda na namin ang lahat gamit ang ligtas na mga default. Gumawa na lang ng iyong account.",
     "itemKeysTitle": "Nagawa ang mga susi sa seguridad",
     "itemKeysDesc": "Awtomatikong naka-encrypt ang iyong session at database.",
-    "itemAccessTitle": "Lokal na pag-abot",
-    "itemAccessDesc": "Maaabot sa {{url}} sa makinang ito.",
+    "itemLanTitle": "Maaabot sa home network",
+    "itemLanDesc": "{{url}} - pati mula sa mga phone at tablet sa parehong Wi-Fi.",
+    "itemLocalTitle": "Sa device na ito lang",
+    "itemLocalDesc": "{{url}} - hindi maaabot ng mga phone sa home network ang Yuvomi sa ganitong paraan. Sa “Baguhin”, ilagay ang address ng computer na ito.",
+    "accessEdit": "Baguhin",
+    "accessDone": "Tapos",
+    "hostLabel": "Address ng computer na ito sa home network",
     "itemBackupsTitle": "Naka-on ang arawang backup",
     "itemBackupsDesc": "May lokal na backup na itinatago gabi-gabi.",
     "backupReminder": "Pagkatapos ng setup, i-backup ang nagawang .env file - naroon ang iyong tanging susi sa pag-encrypt.",

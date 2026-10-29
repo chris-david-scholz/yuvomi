@@ -35,7 +35,8 @@
     "prereqLinkCompose": "Hướng dẫn podman-compose",
     "prereqRecheck": "Kiểm tra lại",
     "errSecureOverHttp": "Địa chỉ công khai bắt đầu bằng http://, nhưng lựa chọn này bắt buộc cookie bảo mật - khi đó không ai đăng nhập được. Hãy chọn \"Truy cập trực tiếp\" hoặc dùng địa chỉ https://.",
-    "errTz": "Múi giờ không hợp lệ. Cần một tên IANA như Europe/Berlin."
+    "errTz": "Múi giờ không hợp lệ. Cần một tên IANA như Europe/Berlin.",
+    "errBaseUrlScheme": "Địa chỉ công khai phải bắt đầu bằng http:// hoặc https://."
   },
   "secrets": {
     "title": "Khóa bảo mật",
@@ -47,7 +48,8 @@
     "errBoth": "Cả hai khóa đều bắt buộc.",
     "dangerWarn": "Hãy lưu các khóa này ngay. Nếu mất, dữ liệu được mã hóa của bạn sẽ không thể khôi phục — không có cách đặt lại. Khi hoàn tất cài đặt, bạn có thể tải xuống tệp .env chứa cả hai khóa.",
     "preserved": "Các khóa hiện có của bạn được giữ nguyên, nên thiết lập này sẽ không khiến bạn mất quyền truy cập cơ sở dữ liệu hiện tại. Để trống một trường để giữ khóa của nó; nhập giá trị mới sẽ thay thế khóa đó.",
-    "keepPlaceholder": "Giữ khóa hiện có"
+    "keepPlaceholder": "Giữ khóa hiện có",
+    "keepValuePlaceholder": "Giữ nguyên giá trị hiện tại"
   },
   "weather": {
     "title": "Widget thời tiết",
@@ -299,8 +301,13 @@
     "subtitle": "Chúng tôi đã chuẩn bị mọi thứ với mặc định an toàn. Giờ chỉ cần tạo tài khoản của bạn.",
     "itemKeysTitle": "Đã tạo khóa bảo mật",
     "itemKeysDesc": "Phiên và cơ sở dữ liệu của bạn được mã hóa tự động.",
-    "itemAccessTitle": "Truy cập cục bộ",
-    "itemAccessDesc": "Truy cập tại {{url}} trên máy này.",
+    "itemLanTitle": "Truy cập được trong mạng gia đình",
+    "itemLanDesc": "{{url}} - cả từ điện thoại và máy tính bảng trên cùng Wi-Fi.",
+    "itemLocalTitle": "Chỉ trên thiết bị này",
+    "itemLocalDesc": "{{url}} - điện thoại trong mạng gia đình không truy cập Yuvomi theo cách này. Dùng “Thay đổi” để nhập địa chỉ của máy tính này.",
+    "accessEdit": "Thay đổi",
+    "accessDone": "Xong",
+    "hostLabel": "Địa chỉ của máy tính này trong mạng gia đình",
     "itemBackupsTitle": "Đã bật sao lưu hằng ngày",
     "itemBackupsDesc": "Mỗi đêm giữ lại một bản sao lưu cục bộ.",
     "backupReminder": "Sau khi thiết lập, hãy sao lưu tệp .env đã tạo — nó chứa các khóa mã hóa duy nhất của bạn.",

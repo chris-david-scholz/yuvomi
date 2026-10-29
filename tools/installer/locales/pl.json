@@ -35,7 +35,8 @@
     "prereqLinkCompose": "Przewodnik podman-compose",
     "prereqRecheck": "Sprawdź ponownie",
     "errSecureOverHttp": "Adres publiczny zaczyna się od http://, ale ten wybór wymusza bezpieczne ciasteczka - wtedy nikt się nie zaloguje. Wybierz „Dostęp bezpośredni\" albo użyj adresu https://.",
-    "errTz": "Nieprawidłowa strefa czasowa. Oczekiwana jest nazwa IANA, np. Europe/Berlin."
+    "errTz": "Nieprawidłowa strefa czasowa. Oczekiwana jest nazwa IANA, np. Europe/Berlin.",
+    "errBaseUrlScheme": "Adres publiczny musi zaczynać się od http:// lub https://."
   },
   "secrets": {
     "title": "Klucze bezpieczeństwa",
@@ -47,7 +48,8 @@
     "errBoth": "Oba klucze są wymagane.",
     "dangerWarn": "Zapisz te klucze teraz. Jeśli je utracisz, Twoje zaszyfrowane dane będą nie do odzyskania — nie ma resetu. Na końcu konfiguracji możesz pobrać plik .env zawierający oba klucze.",
     "preserved": "Istniejące klucze zostają zachowane, więc ta instalacja nie odetnie Ci dostępu do bieżącej bazy danych. Zostaw pole puste, aby zachować jego klucz; wpisanie nowej wartości go zastąpi.",
-    "keepPlaceholder": "Zachowano istniejący klucz"
+    "keepPlaceholder": "Zachowano istniejący klucz",
+    "keepValuePlaceholder": "Obecna wartość zostaje zachowana"
   },
   "weather": {
     "title": "Widget pogodowy",
@@ -299,8 +301,13 @@
     "subtitle": "Przygotowaliśmy wszystko z bezpiecznymi ustawieniami domyślnymi. Teraz utwórz tylko swoje konto.",
     "itemKeysTitle": "Wygenerowano klucze bezpieczeństwa",
     "itemKeysDesc": "Twoja sesja i baza danych są szyfrowane automatycznie.",
-    "itemAccessTitle": "Dostęp lokalny",
-    "itemAccessDesc": "Dostępne pod {{url}} na tym urządzeniu.",
+    "itemLanTitle": "Dostępne w sieci domowej",
+    "itemLanDesc": "{{url}} - także z telefonów i tabletów w tej samej sieci Wi-Fi.",
+    "itemLocalTitle": "Tylko na tym urządzeniu",
+    "itemLocalDesc": "{{url}} - telefony w sieci domowej nie połączą się tak z Yuvomi. W „Zmień” wpisz adres tego komputera.",
+    "accessEdit": "Zmień",
+    "accessDone": "Gotowe",
+    "hostLabel": "Adres tego komputera w sieci domowej",
     "itemBackupsTitle": "Codzienne kopie zapasowe włączone",
     "itemBackupsDesc": "Co noc przechowywana jest lokalna kopia zapasowa.",
     "backupReminder": "Po konfiguracji utwórz kopię wygenerowanego pliku .env — zawiera on Twoje jedyne klucze szyfrowania.",

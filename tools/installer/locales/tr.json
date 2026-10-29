@@ -35,7 +35,8 @@
     "prereqLinkCompose": "podman-compose kılavuzu",
     "prereqRecheck": "Yeniden denetle",
     "errSecureOverHttp": "Herkese açık adres http:// ile başlıyor, ancak bu seçim güvenli çerezleri zorunlu kılıyor - o zaman kimse oturum açamaz. \"Doğrudan erişim\" seç ya da https:// adresi kullan.",
-    "errTz": "Geçersiz saat dilimi. Europe/Berlin gibi bir IANA adı bekleniyor."
+    "errTz": "Geçersiz saat dilimi. Europe/Berlin gibi bir IANA adı bekleniyor.",
+    "errBaseUrlScheme": "Genel adres http:// veya https:// ile başlamalıdır."
   },
   "secrets": {
     "title": "Güvenlik Anahtarları",
@@ -47,7 +48,8 @@
     "errBoth": "Her iki anahtar da gereklidir.",
     "dangerWarn": "Bu anahtarları şimdi kaydedin. Kaybederseniz şifrelenmiş verileriniz kurtarılamaz — sıfırlama yoktur. Kurulumun sonunda her iki anahtarı içeren .env dosyasını indirebilirsiniz.",
     "preserved": "Mevcut anahtarların korunur, bu nedenle bu kurulum seni geçerli veritabanının dışında bırakmaz. Anahtarını korumak için bir alanı boş bırak; yeni bir değer girmek onu değiştirir.",
-    "keepPlaceholder": "Mevcut anahtar korunuyor"
+    "keepPlaceholder": "Mevcut anahtar korunuyor",
+    "keepValuePlaceholder": "Mevcut değer korunur"
   },
   "weather": {
     "title": "Hava Durumu Widget",
@@ -299,8 +301,13 @@
     "subtitle": "Her şeyi güvenli varsayılanlarla hazırladık. Şimdi yalnızca hesabınızı oluşturun.",
     "itemKeysTitle": "Güvenlik anahtarları oluşturuldu",
     "itemKeysDesc": "Oturumunuz ve veritabanınız otomatik olarak şifrelenir.",
-    "itemAccessTitle": "Yerel erişim",
-    "itemAccessDesc": "Bu makinede {{url}} adresinden erişilebilir.",
+    "itemLanTitle": "Ev ağında erişilebilir",
+    "itemLanDesc": "{{url}} - aynı Wi-Fi'deki telefon ve tabletlerden de.",
+    "itemLocalTitle": "Yalnızca bu cihazda",
+    "itemLocalDesc": "{{url}} - ev ağındaki telefonlar Yuvomi'ye bu şekilde ulaşamaz. “Değiştir” ile bu bilgisayarın adresini gir.",
+    "accessEdit": "Değiştir",
+    "accessDone": "Bitti",
+    "hostLabel": "Bu bilgisayarın ev ağındaki adresi",
     "itemBackupsTitle": "Günlük yedeklemeler açık",
     "itemBackupsDesc": "Her gece yerel bir yedek saklanır.",
     "backupReminder": "Kurulumdan sonra oluşturulan .env dosyasını yedekleyin — tek şifreleme anahtarlarınızı içerir.",

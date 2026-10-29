@@ -35,7 +35,8 @@
     "prereqLinkCompose": "Guia do podman-compose",
     "prereqRecheck": "Verificar novamente",
     "errSecureOverHttp": "O endereço público começa com http://, mas esta opção exige cookies seguros - assim ninguém conseguirá fazer login. Escolha \"Acesso direto\" ou use um endereço https://.",
-    "errTz": "Fuso horário inválido. É esperado um identificador IANA, como America/Sao_Paulo."
+    "errTz": "Fuso horário inválido. É esperado um identificador IANA, como America/Sao_Paulo.",
+    "errBaseUrlScheme": "O endereço público precisa começar com http:// ou https://."
   },
   "secrets": {
     "title": "Chaves de segurança",
@@ -47,7 +48,8 @@
     "errBoth": "Ambas as chaves são obrigatórias.",
     "dangerWarn": "Guarde estas chaves agora. Se você as perder, seus dados criptografados serão irrecuperáveis - não há como redefini-las. No final da configuração, você poderá baixar o arquivo .env com as duas chaves.",
     "preserved": "Suas chaves existentes serão mantidas, então esta instalação não impedirá o acesso ao banco de dados atual. Deixe o campo em branco para manter a chave; digitar um novo valor a substituirá.",
-    "keepPlaceholder": "Chave existente mantida"
+    "keepPlaceholder": "Chave existente mantida",
+    "keepValuePlaceholder": "O valor atual é mantido"
   },
   "weather": {
     "title": "Widget de clima",
@@ -299,8 +301,13 @@
     "subtitle": "Definimos configurações seguras por padrão. Agora só falta criar sua conta:",
     "itemKeysTitle": "Chaves de segurança geradas",
     "itemKeysDesc": "Sua sessão e o banco de dados são criptografados automaticamente.",
-    "itemAccessTitle": "Acesso local",
-    "itemAccessDesc": "Disponível em {{url}} neste dispositivo.",
+    "itemLanTitle": "Acessível na sua rede doméstica",
+    "itemLanDesc": "{{url}} - também em celulares e tablets no mesmo Wi-Fi.",
+    "itemLocalTitle": "Somente neste dispositivo",
+    "itemLocalDesc": "{{url}} - os celulares da sua rede doméstica não conseguem acessar o Yuvomi assim. Em “Alterar”, informe o endereço deste computador.",
+    "accessEdit": "Alterar",
+    "accessDone": "Concluído",
+    "hostLabel": "Endereço deste computador na rede doméstica",
     "itemBackupsTitle": "Backups diários ativados",
     "itemBackupsDesc": "Um backup local é gerado automaticamente todas as noites.",
     "backupReminder": "Ao concluir a configuração, faça uma cópia de segurança do arquivo .env gerado - ele guarda suas chaves exclusivas de criptografia.",

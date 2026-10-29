@@ -35,7 +35,8 @@
     "prereqLinkCompose": "podman-compose 指南",
     "prereqRecheck": "重新检查",
     "errSecureOverHttp": "公开地址以 http:// 开头，但此选项会强制使用安全 Cookie，这样任何人都无法登录。请选择「直接访问」或改用 https:// 地址。",
-    "errTz": "时区无效。需要 IANA 名称，例如 Europe/Berlin。"
+    "errTz": "时区无效。需要 IANA 名称，例如 Europe/Berlin。",
+    "errBaseUrlScheme": "公开地址必须以 http:// 或 https:// 开头。"
   },
   "secrets": {
     "title": "安全密钥",
@@ -47,7 +48,8 @@
     "errBoth": "两个密钥都为必填项。",
     "dangerWarn": "现在就保存这些密钥。一旦丢失，你的加密数据将无法恢复——没有重置。 设置结束时，你可以下载包含这两个密钥的 .env 文件。",
     "preserved": "系统会保留你现有的密钥，因此本次安装不会让你无法访问当前数据库。留空即保留该密钥；填入新值则会替换它。",
-    "keepPlaceholder": "保留现有密钥"
+    "keepPlaceholder": "保留现有密钥",
+    "keepValuePlaceholder": "保留当前值"
   },
   "weather": {
     "title": "天气小组件",
@@ -299,8 +301,13 @@
     "subtitle": "我们已用安全的默认值准备好了一切。接下来只需创建你的账户。",
     "itemKeysTitle": "已生成安全密钥",
     "itemKeysDesc": "你的会话和数据库会自动加密。",
-    "itemAccessTitle": "本地访问",
-    "itemAccessDesc": "可在本机通过 {{url}} 访问。",
+    "itemLanTitle": "可在家庭网络中访问",
+    "itemLanDesc": "{{url}} - 同一 Wi-Fi 下的手机和平板也能打开。",
+    "itemLocalTitle": "仅限此设备",
+    "itemLocalDesc": "{{url}} - 这样家庭网络中的手机无法访问 Yuvomi。请通过“更改”输入这台电脑的地址。",
+    "accessEdit": "更改",
+    "accessDone": "完成",
+    "hostLabel": "这台电脑在家庭网络中的地址",
     "itemBackupsTitle": "已开启每日备份",
     "itemBackupsDesc": "每晚都会保留一份本地备份。",
     "backupReminder": "设置完成后，请备份生成的 .env 文件——它保存着你唯一的加密密钥。",

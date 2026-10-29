@@ -35,7 +35,8 @@
     "prereqLinkCompose": "podman-compose 指南",
     "prereqRecheck": "重新檢查",
     "errSecureOverHttp": "公開位址以 http:// 開頭，但此選項會強制使用安全 Cookie，這樣任何人都無法登入。請選擇「直接連線」或改用 https:// 位址。",
-    "errTz": "時區無效。需要 IANA 名稱，例如 Europe/Berlin。"
+    "errTz": "時區無效。需要 IANA 名稱，例如 Europe/Berlin。",
+    "errBaseUrlScheme": "公開位址必須以 http:// 或 https:// 開頭。"
   },
   "secrets": {
     "title": "安全金鑰",
@@ -47,7 +48,8 @@
     "errBoth": "兩個金鑰都是必填項目。",
     "dangerWarn": "現在就儲存這些金鑰。一旦遺失，您的加密資料將無法復原 - 沒有重設的方法。設定結束時，您可以下載包含這兩個金鑰的 .env 檔案。",
     "preserved": "系統會保留您現有的金鑰，因此本次安裝不會讓您無法存取目前的資料庫。留空即保留該金鑰；填入新值則會取代它。",
-    "keepPlaceholder": "保留現有金鑰"
+    "keepPlaceholder": "保留現有金鑰",
+    "keepValuePlaceholder": "保留目前的值"
   },
   "weather": {
     "title": "天氣小工具",
@@ -299,8 +301,13 @@
     "subtitle": "我們已用安全的預設值準備好一切。接下來只需要建立您的帳戶。",
     "itemKeysTitle": "已產生安全金鑰",
     "itemKeysDesc": "您的工作階段和資料庫會自動加密。",
-    "itemAccessTitle": "本機連線",
-    "itemAccessDesc": "可在本機透過 {{url}} 連線。",
+    "itemLanTitle": "可在家用網路中存取",
+    "itemLanDesc": "{{url}} - 同一 Wi-Fi 下的手機和平板也能開啟。",
+    "itemLocalTitle": "僅限此裝置",
+    "itemLocalDesc": "{{url}} - 這樣家用網路中的手機無法連上 Yuvomi。請透過「變更」輸入這台電腦的位址。",
+    "accessEdit": "變更",
+    "accessDone": "完成",
+    "hostLabel": "這台電腦在家用網路中的位址",
     "itemBackupsTitle": "已開啟每日備份",
     "itemBackupsDesc": "每晚都會保留一份本機備份。",
     "backupReminder": "設定完成後，請備份產生的 .env 檔案 - 裡面存著您唯一的加密金鑰。",

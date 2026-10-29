@@ -35,7 +35,8 @@
     "prereqLinkCompose": "podman-compose のガイド",
     "prereqRecheck": "再確認する",
     "errSecureOverHttp": "公開アドレスが http:// で始まっていますが、この選択はセキュア Cookie を強制します。その組み合わせではログインできません。「直接アクセス」を選ぶか、https:// のアドレスを使ってください。",
-    "errTz": "タイムゾーンが無効です。Europe/Berlin のような IANA 名を指定してください。"
+    "errTz": "タイムゾーンが無効です。Europe/Berlin のような IANA 名を指定してください。",
+    "errBaseUrlScheme": "公開アドレスは http:// または https:// で始める必要があります。"
   },
   "secrets": {
     "title": "セキュリティキー",
@@ -47,7 +48,8 @@
     "errBoth": "両方のキーが必要です。",
     "dangerWarn": "これらのキーを今すぐ保存してください。失うと、暗号化されたデータは復元できません — リセットはありません。 セットアップの最後に、両方のキーを含む .env ファイルをダウンロードできます。",
     "preserved": "既存のキーは保持されるため、このセットアップで現在のデータベースにアクセスできなくなることはありません。キーを保持するにはフィールドを空のままにしてください。新しい値を入力すると置き換えられます。",
-    "keepPlaceholder": "既存のキーを保持"
+    "keepPlaceholder": "既存のキーを保持",
+    "keepValuePlaceholder": "現在の値を保持します"
   },
   "weather": {
     "title": "天気ウィジェット",
@@ -299,8 +301,13 @@
     "subtitle": "安全な既定値ですべて準備しました。あとはアカウントを作成するだけです。",
     "itemKeysTitle": "セキュリティキーを生成しました",
     "itemKeysDesc": "セッションとデータベースは自動的に暗号化されます。",
-    "itemAccessTitle": "ローカルアクセス",
-    "itemAccessDesc": "このマシンの {{url}} でアクセスできます。",
+    "itemLanTitle": "ホームネットワークで利用可能",
+    "itemLanDesc": "{{url}} - 同じWi-Fiのスマートフォンやタブレットからも開けます。",
+    "itemLocalTitle": "このデバイスのみ",
+    "itemLocalDesc": "{{url}} - このままではホームネットワークのスマートフォンからYuvomiに接続できません。「変更」でこのコンピューターのアドレスを入力してください。",
+    "accessEdit": "変更",
+    "accessDone": "完了",
+    "hostLabel": "ホームネットワーク上のこのコンピューターのアドレス",
     "itemBackupsTitle": "毎日のバックアップが有効",
     "itemBackupsDesc": "毎晩ローカルバックアップを保持します。",
     "backupReminder": "セットアップ後、生成された .env ファイルをバックアップしてください。唯一の暗号化キーが含まれています。",

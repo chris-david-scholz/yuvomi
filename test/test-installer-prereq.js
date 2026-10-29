@@ -269,10 +269,16 @@ test('kein Compose-Manifest nutzt die env_file-Langform (Compose <2.24 lehnt sie
   }
 });
 
-test('install.html setzt im Reverse-Proxy-Pfad SESSION_SECURE=true', () => {
-  const src = readFileSync(new URL('../tools/installer/install.html', import.meta.url), 'utf8');
-  assert.match(src, /S\.SESSION_SECURE\s*=\s*'true'/,
+test('install.html setzt im Reverse-Proxy-Pfad SESSION_SECURE=true', async () => {
+  // Seit dem Rerun-Schutz rechnet accessEnv() (rerun-prefill.js) das Paar; die
+  // Zusage bleibt dieselbe: eine Erstinstallation hinter dem Proxy bekommt
+  // sichere Cookies, und cfg-next nimmt genau diesen Wert.
+  const { accessEnv } = await import('../tools/installer/rerun-prefill.js');
+  assert.equal(accessEnv('proxy', null).SESSION_SECURE, 'true',
     'Proxy-Pfad schreibt SESSION_SECURE nicht auf true');
+  const src = readFileSync(new URL('../tools/installer/install.html', import.meta.url), 'utf8');
+  assert.match(src, /Object\.assign\(S, accessEnv\(choice, rerunValues\)\)/,
+    'cfg-next setzt SESSION_SECURE nicht aus accessEnv');
 });
 
 // ── env-schema deckt die neuen Settings ab ─────────────────────────────────────

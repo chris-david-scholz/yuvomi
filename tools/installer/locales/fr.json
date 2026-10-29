@@ -35,7 +35,8 @@
     "prereqLinkCompose": "Le guide podman-compose",
     "prereqRecheck": "Vérifier à nouveau",
     "errSecureOverHttp": "L'adresse publique commence par http://, mais ce choix impose des cookies sécurisés : personne ne peut alors se connecter. Choisis « Accès direct » ou utilise une adresse https://.",
-    "errTz": "Fuseau horaire non valide. Un nom IANA comme Europe/Berlin est attendu."
+    "errTz": "Fuseau horaire non valide. Un nom IANA comme Europe/Berlin est attendu.",
+    "errBaseUrlScheme": "L'adresse publique doit commencer par http:// ou https://."
   },
   "secrets": {
     "title": "Clés de sécurité",
@@ -47,7 +48,8 @@
     "errBoth": "Les deux clés sont requises.",
     "dangerWarn": "Enregistrez ces clés maintenant. Si vous les perdez, vos données chiffrées seront irrécupérables : aucune réinitialisation n’est possible. À la fin de l'installation, vous pourrez télécharger le fichier .env contenant les deux clés.",
     "preserved": "Vos clés existantes sont conservées, cette installation ne vous coupera donc pas l'accès à la base de données actuelle. Laissez un champ vide pour conserver sa clé ; saisir une nouvelle valeur la remplace.",
-    "keepPlaceholder": "Clé existante conservée"
+    "keepPlaceholder": "Clé existante conservée",
+    "keepValuePlaceholder": "La valeur actuelle est conservée"
   },
   "weather": {
     "title": "Widget Météo",
@@ -299,8 +301,13 @@
     "subtitle": "Nous avons tout préparé avec des valeurs sûres. Il ne reste plus qu’à créer votre compte.",
     "itemKeysTitle": "Clés de sécurité générées",
     "itemKeysDesc": "Votre session et votre base de données sont chiffrées automatiquement.",
-    "itemAccessTitle": "Accès local",
-    "itemAccessDesc": "Accessible sur {{url}} depuis cette machine.",
+    "itemLanTitle": "Accessible sur votre réseau domestique",
+    "itemLanDesc": "{{url}} - aussi depuis les téléphones et tablettes du même Wi-Fi.",
+    "itemLocalTitle": "Uniquement sur cet appareil",
+    "itemLocalDesc": "{{url}} - les téléphones de votre réseau domestique ne peuvent pas joindre Yuvomi ainsi. Avec « Modifier », saisissez l'adresse de cet ordinateur.",
+    "accessEdit": "Modifier",
+    "accessDone": "Terminé",
+    "hostLabel": "Adresse de cet ordinateur sur votre réseau domestique",
     "itemBackupsTitle": "Sauvegardes quotidiennes activées",
     "itemBackupsDesc": "Une sauvegarde locale est conservée chaque nuit.",
     "backupReminder": "Après l’installation, sauvegardez le fichier .env généré : il contient vos seules clés de chiffrement.",

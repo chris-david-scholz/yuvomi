@@ -35,7 +35,8 @@
     "prereqLinkCompose": "De podman-compose-handleiding",
     "prereqRecheck": "Opnieuw controleren",
     "errSecureOverHttp": "Het openbare adres begint met http://, maar deze keuze vereist beveiligde cookies - dan kan niemand inloggen. Kies \"Directe toegang\" of gebruik een https://-adres.",
-    "errTz": "Ongeldige tijdzone. Verwacht wordt een IANA-naam zoals Europe/Berlin."
+    "errTz": "Ongeldige tijdzone. Verwacht wordt een IANA-naam zoals Europe/Berlin.",
+    "errBaseUrlScheme": "Het openbare adres moet beginnen met http:// of https://."
   },
   "secrets": {
     "title": "Beveiligingssleutels",
@@ -47,7 +48,8 @@
     "errBoth": "Beide sleutels zijn vereist.",
     "dangerWarn": "Bewaar deze sleutels nu. Als je ze kwijtraakt, zijn je versleutelde gegevens onherstelbaar — er is geen herstel. Aan het einde van de installatie kun je het .env-bestand met beide sleutels downloaden.",
     "preserved": "Je bestaande sleutels blijven behouden, zodat deze installatie je niet buitensluit van de huidige database. Laat een veld leeg om de sleutel te behouden; een nieuwe waarde vervangt hem.",
-    "keepPlaceholder": "Bestaande sleutel behouden"
+    "keepPlaceholder": "Bestaande sleutel behouden",
+    "keepValuePlaceholder": "Huidige waarde blijft behouden"
   },
   "weather": {
     "title": "Weer-widget",
@@ -299,8 +301,13 @@
     "subtitle": "We hebben alles voorbereid met veilige standaardwaarden. Maak nu alleen nog je account aan.",
     "itemKeysTitle": "Beveiligingssleutels gegenereerd",
     "itemKeysDesc": "Je sessie en database worden automatisch versleuteld.",
-    "itemAccessTitle": "Lokale toegang",
-    "itemAccessDesc": "Bereikbaar op {{url}} op deze computer.",
+    "itemLanTitle": "Bereikbaar in je thuisnetwerk",
+    "itemLanDesc": "{{url}} - ook vanaf telefoons en tablets op dezelfde wifi.",
+    "itemLocalTitle": "Alleen op dit apparaat",
+    "itemLocalDesc": "{{url}} - telefoons in je thuisnetwerk bereiken Yuvomi zo niet. Vul via ‘Wijzigen’ het adres van deze computer in.",
+    "accessEdit": "Wijzigen",
+    "accessDone": "Gereed",
+    "hostLabel": "Adres van deze computer in je thuisnetwerk",
     "itemBackupsTitle": "Dagelijkse back-ups aan",
     "itemBackupsDesc": "Elke nacht wordt een lokale back-up bewaard.",
     "backupReminder": "Maak na de installatie een back-up van het gegenereerde .env-bestand — het bevat je enige versleutelingssleutels.",

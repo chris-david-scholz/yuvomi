@@ -35,7 +35,8 @@
     "prereqLinkCompose": "Panduan podman-compose",
     "prereqRecheck": "Periksa lagi",
     "errSecureOverHttp": "Alamat publik dimulai dengan http://, tetapi pilihan ini mewajibkan cookie aman - tidak ada yang bisa masuk. Pilih \"Akses langsung\" atau gunakan alamat https://.",
-    "errTz": "Zona waktu tidak valid. Diharapkan nama IANA seperti Europe/Berlin."
+    "errTz": "Zona waktu tidak valid. Diharapkan nama IANA seperti Europe/Berlin.",
+    "errBaseUrlScheme": "Alamat publik harus diawali http:// atau https://."
   },
   "secrets": {
     "title": "Kunci keamanan",
@@ -47,7 +48,8 @@
     "errBoth": "Kedua kunci diperlukan.",
     "dangerWarn": "Simpan kunci ini sekarang. Jika hilang, data terenkripsi Anda tidak dapat dipulihkan — tidak ada penyetelan ulang. Di akhir penyiapan, Anda dapat mengunduh file .env yang berisi kedua kunci.",
     "preserved": "Kunci yang sudah ada tetap dipertahankan, sehingga penyiapan ini tidak akan mengunci Anda dari basis data saat ini. Biarkan kolom kosong untuk mempertahankan kuncinya; memasukkan nilai baru akan menggantinya.",
-    "keepPlaceholder": "Kunci yang ada dipertahankan"
+    "keepPlaceholder": "Kunci yang ada dipertahankan",
+    "keepValuePlaceholder": "Nilai saat ini dipertahankan"
   },
   "weather": {
     "title": "Widget cuaca",
@@ -299,8 +301,13 @@
     "subtitle": "Kami sudah menyiapkan semuanya dengan nilai aman default. Tinggal buat akun Anda.",
     "itemKeysTitle": "Kunci keamanan dibuat",
     "itemKeysDesc": "Sesi dan basis data Anda dienkripsi secara otomatis.",
-    "itemAccessTitle": "Akses lokal",
-    "itemAccessDesc": "Dapat diakses di {{url}} pada mesin ini.",
+    "itemLanTitle": "Dapat diakses di jaringan rumah",
+    "itemLanDesc": "{{url}} - juga dari ponsel dan tablet di Wi-Fi yang sama.",
+    "itemLocalTitle": "Hanya di perangkat ini",
+    "itemLocalDesc": "{{url}} - ponsel di jaringan rumah tidak bisa menjangkau Yuvomi dengan cara ini. Lewat “Ubah”, masukkan alamat komputer ini.",
+    "accessEdit": "Ubah",
+    "accessDone": "Selesai",
+    "hostLabel": "Alamat komputer ini di jaringan rumah",
     "itemBackupsTitle": "Pencadangan harian aktif",
     "itemBackupsDesc": "Cadangan lokal disimpan setiap malam.",
     "backupReminder": "Setelah penyiapan, cadangkan berkas .env yang dibuat — berkas itu menyimpan satu-satunya kunci enkripsi Anda.",

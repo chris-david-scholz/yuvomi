@@ -35,7 +35,8 @@
     "prereqLinkCompose": "Die podman-compose-Anleitung",
     "prereqRecheck": "Erneut prüfen",
     "errSecureOverHttp": "Die öffentliche Adresse beginnt mit http://, diese Auswahl erzwingt aber sichere Cookies - dann ist keine Anmeldung möglich. Wähle „Direkter Zugriff\" oder nutze eine https://-Adresse.",
-    "errTz": "Ungültige Zeitzone. Erwartet wird ein IANA-Name wie Europe/Berlin."
+    "errTz": "Ungültige Zeitzone. Erwartet wird ein IANA-Name wie Europe/Berlin.",
+    "errBaseUrlScheme": "Die öffentliche Adresse muss mit http:// oder https:// beginnen."
   },
   "secrets": {
     "title": "Sicherheitsschlüssel",
@@ -47,7 +48,8 @@
     "errBoth": "Beide Schlüssel sind erforderlich.",
     "dangerWarn": "Speichere diese Schlüssel jetzt. Gehen sie verloren, sind deine verschlüsselten Daten unwiederbringlich - es gibt kein Zurücksetzen. Am Ende der Einrichtung kannst du die .env-Datei mit beiden Schlüsseln herunterladen.",
     "preserved": "Deine bestehenden Schlüssel bleiben erhalten - diese Einrichtung sperrt dich nicht aus der aktuellen Datenbank aus. Lass ein Feld leer, um seinen Schlüssel zu behalten; ein neuer Wert ersetzt ihn.",
-    "keepPlaceholder": "Bestehender Schlüssel bleibt erhalten"
+    "keepPlaceholder": "Bestehender Schlüssel bleibt erhalten",
+    "keepValuePlaceholder": "Bisheriger Wert bleibt erhalten"
   },
   "weather": {
     "title": "Wetter-Widget",
@@ -299,8 +301,13 @@
     "subtitle": "Wir haben alles mit sicheren Standardwerten vorbereitet. Erstelle als Nächstes nur noch dein Konto.",
     "itemKeysTitle": "Sicherheitsschlüssel erzeugt",
     "itemKeysDesc": "Sitzung und Datenbank werden automatisch verschlüsselt.",
-    "itemAccessTitle": "Lokaler Zugriff",
-    "itemAccessDesc": "Erreichbar unter {{url}} auf diesem Gerät.",
+    "itemLanTitle": "Erreichbar im Heimnetz",
+    "itemLanDesc": "{{url}} - auch von Handys und Tablets im selben WLAN.",
+    "itemLocalTitle": "Nur auf diesem Gerät",
+    "itemLocalDesc": "{{url}} - Handys im Heimnetz erreichen Yuvomi so nicht. Über „Ändern“ trägst du die Adresse dieses Rechners ein.",
+    "accessEdit": "Ändern",
+    "accessDone": "Fertig",
+    "hostLabel": "Adresse dieses Rechners im Heimnetz",
     "itemBackupsTitle": "Tägliche Backups aktiv",
     "itemBackupsDesc": "Jede Nacht wird ein lokales Backup aufbewahrt.",
     "backupReminder": "Sichere nach der Einrichtung die erzeugte .env-Datei - sie enthält deine einzigen Verschlüsselungsschlüssel.",
