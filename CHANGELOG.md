@@ -7,12 +7,157 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- **A document can name who it is about.** The document dialog has a new "About" field for one
+  household member, and the Documents page can filter by person. The person also gets the expiry
+  reminder, along with whoever filed the document, and once if that is the same person. This never
+  changes who can see the document: if the person cannot open it, the dialog says so and they get
+  no reminder until they can.
+- **Expiring documents appear in Key dates.** A document about to expire now shows up on the
+  overview tile next to your events and tasks, with the person's name, and opens directly in the
+  viewer. Archived documents stay out, and the tile follows the Documents module switch and your
+  rights.
+
+### Changed
+- **A document's lead time now also decides when it shows as expiring.** The "expiring" chip and
+  the Deadlines filter used a fixed 30 days, whatever lead time the reminder had. They now follow
+  the document's own lead time, and stay at 30 days if it has none, so a document with a 90-day
+  reminder is marked from the day the reminder arrives, and one with 7 days is no longer marked
+  three weeks early.
+- **The website tells Yuvomi as one story instead of a feature list.** The homepage at yuvomi.cloud
+  now starts with the problem it takes off your hands - many apps, and one person who keeps it all
+  in their head - then shows how the parts work together, a day at home from morning to evening,
+  what the family gets, and why it stays yours: no subscription, your data on your own disk and
+  encrypted if you want, and one update check as the only call out of the box. Setup comes last,
+  with one main route, the NAS app stores as one-click options, the other ways behind "More ways
+  to install" and the technical details folded away, and the questions worth asking first open one
+  answer at a time. The text is plainer in
+  English and German, technical terms are explained where they appear, and the list of outbound
+  connections now also names Gravatar profile pictures and installing extension modules from GitHub.
+  The screens are staged instead of pasted in: the top of the page shows the desktop, the kitchen
+  wall tablet and a phone together, each connection between two parts shows both ends as real
+  excerpts from the app, the day at home shows each moment as a focused crop, and the overview,
+  wall and health screenshots are current again. On a phone the page is nearly a third shorter.
+  The top bar is the same on every page of the site and groups the jump menu, language and theme in
+  one glass control: EN and DE are two buttons, and pressing the language you are already reading
+  no longer switches to the other one; the theme names its mode on wide screens, and GitHub is a
+  single icon. The jump menu marks the section you are in. The floating Install button on phones
+  gets out of the way while you scroll down and comes back when you scroll up, and stays away over
+  the setup section and at the end of the page; "Back to top" appears only after half the page.
+  The family section shows the kitchen wall tablet large, with the shared notes board on a phone in
+  front, device frames stay visible in dark mode, and the excerpts are sharp on high-density phone
+  screens. The overview image at the top now starts loading right away on phones too, and the
+  footer says "MIT-Lizenz" on the German pages.
+
 ### Fixed
 - **The Podman Quadlet health check passes.** The `HealthCmd` in `tools/quadlet/oikos.container`
   reached Podman as a shell command with a missing closing quote, so every check failed with
   `Syntax error: Unterminated quoted string` and the container stayed `unhealthy` although the app
   was running. The quotes are swapped - single quotes around the `node -e` argument, double quotes
   inside the JavaScript.
+- **Vietnamese counts show the real number.** In browsers with current language data, Vietnamese
+  picks the singular wording for 0 as well as for 1, so eleven messages such as the active filter
+  count said "1" when nothing was selected. They now show the actual count.
+- **The website no longer says contacts sync both ways.** Contacts come in over CardDAV and are
+  not written back; the homepage and the install page promised a two-way sync for them.
+- **Running the web installer again keeps your settings.** On an existing installation the advanced
+  setup now fills its fields with the values from your `.env` - port, public address, reverse-proxy
+  settings, timezone, weather, email, sign-on, storage and backups - so a second run no longer resets
+  them to defaults when you only wanted to add something. A hand-tuned `TRUST_PROXY=2` stays as long
+  as you keep the pre-selected access choice, and the review page shows the kept values instead of
+  "Not set up". Passwords, client secrets and keys never reach the browser: their fields stay empty
+  with the note "Current value is kept", and the existing values are written back. Lines you leave
+  unchanged stay exactly as written, inline comments and quotes included, and a secret read from a
+  file (`GOOGLE_CLIENT_SECRET_FILE`, `SESSION_SECRET_FILE` and the other `_FILE` variables) counts as
+  kept instead of being written a second time, which stopped Yuvomi from starting. A setting you
+  leave as it was is no longer checked against the installer's stricter rules either: a port or
+  address written as a Compose variable (`${HTTP_PORT:-3000}`), a backup schedule with a seconds
+  field or a full weekday name, and OAuth redirect addresses registered under a different host all
+  stay as they are until you change the address or the client.
+- **The simple setup makes Yuvomi reachable on your home network.** It used to write
+  `http://localhost:3000` as the address, so invitation and password-reset links and the app on
+  your phones pointed at a device that could not be reached. It now uses this computer's address on
+  the home network (for example `http://192.168.1.20:3000`), skips Docker bridges and VPN tunnels when
+  looking for it, and lets you change it with "Change". If it finds none, it says plainly that Yuvomi
+  is then reachable only on this computer.
+- **A public address without `http://` or `https://` is refused in the installer** instead of being
+  silently replaced by an address derived from host and port.
+- **The installer catches settings the server would reject before saving them.** A backup schedule
+  like `99 * * * *` used to pass and then switched backups off at startup; the schedule is now
+  checked field by field (minute 0-59, hour 0-23, day 1-31, month 1-12, weekday 0-7). Google,
+  Outlook and iCloud need their ID and secret together, WebDAV switched on needs its URL, the
+  document folder inside the container must start with `/`, and the `REPLACE_WITH_` placeholder
+  from `.env.example` is no longer accepted as a key. A failed key generation now shows a message
+  instead of leaving the key fields silently empty, and the start screen no longer piles up status
+  requests when the server answers slowly.
+- **Clearer wording in the installer.** The key warning is now a calm notice that says what happens:
+  you get a key file (`.env`) at the end, and without the database key your data is lost. It used
+  to be a red alarm that asked you to save the keys "now". The start screen talks about
+  downloading, starting and checking Yuvomi instead of images, containers and health checks, the
+  start button reads "Save & Start Yuvomi" for Docker and Podman alike, and the iCloud row no longer
+  carries a "Legacy" label.
+- **The installer's step count matches its step list.** "Start Yuvomi" is now a numbered step like
+  the others, so the list and "Step N of M" count the same steps: the advanced setup used to show
+  "Step 8 of 9" next to ten entries, the simple setup "Step 1 of 2" next to three.
+- **How you reach Yuvomi is a two-way switch in the installer** instead of a drop-down with two
+  entries, and the home-network switches in the advanced step form their own named group, so screen
+  readers announce the warning above them. On the review page, anything not set up says so in its
+  own row ("Not set up") instead of one row that listed the missing services in the value column. A
+  failed save now reads "The settings could not be saved." instead of naming the `.env` file.
+- **The installer opens faster and in your language right away.** The language files load in
+  parallel and the scripts are fetched with the first byte, the page stays hidden until it can show
+  your language (with a safety timeout), and HTML, scripts and language files go out compressed:
+  about 160 kB instead of 520 kB per visit. Every response now forbids embedding the installer in
+  another page (it shows your keys) and sends no referrer, and the browser tab shows the Yuvomi icon
+  instead of a missing-icon error.
+- **Installer fields behave like the app's.** Address fields open the URL keyboard on phones and are
+  no longer capitalised or spell-checked, ports open the number pad, and the Enter key on the
+  on-screen keyboard says "Next". A field the browser itself recognises as invalid (an address
+  without `https://`) turns red after you leave it, and screen readers hear the same. Long labels
+  on the review page ("Database encryption key") are hyphenated instead of running into the value,
+  addresses like `./data` read correctly in Arabic and Persian, and the page no longer puts a focus
+  ring on the first heading when it opens. Field borders, the main button and the browser bar now
+  match the app, and the language picker on phones is only as wide as the language it shows.
+- **No more long dashes in the installer's texts.** All 27 languages of the web and command-line
+  installer use a plain hyphen, also for ranges and negative numbers.
+- **Emptying a field when you run the installer again removes the setting.** A pre-filled value you
+  clear (for example the weather city or the sender name) used to come back from the old `.env`; it is
+  now removed, and the review page lists it under "Will be removed from .env". Fields you leave
+  alone, passwords and keys are never removed this way.
+- **The installer asks for a second click only when it replaces something.** A first installation
+  saves and starts with one click; with an existing `.env` or a running container the confirmation
+  stays, and a line above the button now says what you confirm - the old `.env` is replaced after a
+  backup, the running container restarts, or both.
+- **The advanced setup also starts with your home-network address.** Like the simple setup it fills
+  in this computer's address on the home network instead of `localhost`, and the review page says
+  calmly when an address is reachable only on this device.
+- **Backup schedules the scheduler would never run are refused.** A day that no chosen month has
+  (`0 3 31 2 *`, February 31) used to pass and switched backups off at startup. The message now also
+  names the six-field form with seconds and shorthands such as `@daily`.
+- **Copying in the installer says when it did not work.** If the clipboard refuses, the value is
+  selected for manual copying and the note says so, instead of claiming "Copied".
+- **Browsers no longer offer saved passwords in the installer's secret fields.** Calendar, sign-on
+  and app-password fields are marked as new secrets, so a password manager does not fill in an
+  unrelated login.
+- **The installer's last screen leads with the success.** One check mark says Yuvomi is ready, and
+  saving the key file is a quiet checklist row that ticks itself off after the download, instead of
+  a warning banner, a second logo and a download button above "Open Yuvomi". The note that the
+  installer shuts down soon stays as a small line until the file is saved.
+- **Skipped steps look skipped in the installer's step list.** Weather, calendar, email, storage and
+  advanced steps you leave empty show a dash instead of a green check mark.
+- **Installer fields match the app's.** Fields are 48 pixels high on the app's field background, the
+  show-password and copy buttons are full-size touch targets, the Yuvomi mark in the header looks
+  the same as in the app in dark mode, and hovering the advanced option no longer pulls harder than
+  the recommended one.
+- **Clearer installer messages.** A missing field in the admin step is named and focused instead of
+  "All fields are required", a server's own error text appears as a separate "Details" line, the
+  example values in the address and name fields are in your language, the start screen says that a
+  first run usually takes 1-3 minutes and counts in minutes, and technical terms like "session
+  secret", "SSRF protection" and "Compose file" follow a plain description instead of leading it.
+- **Installer hints read at a calmer line length.** Explanations under fields wrap at about 80
+  characters instead of 90, spacing follows the app's scale, a failed copy shows its note on its own
+  line instead of breaking around the button, and the "taking longer than usual" note no longer
+  touches the line above it.
 
 ## [2.83.0] - 2026-10-29
 
