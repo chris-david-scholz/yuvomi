@@ -57,6 +57,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   util-linux, which is already in the base image, and sets `HOME` to node's home as `gosu` did.
   The `gosu` package is gone from the image. Starting as root without the option, or directly as
   `node`, works as before.
+- **Reset to original restores a subscribed event at once.** Resetting a changed event from an ICS
+  subscription only cleared the edit mark, so the changed text stayed until the next sync. Each sync
+  now keeps the feed's values, and the reset restores them straight away, without a network call.
+  Subscriptions synced before this update have no stored values yet: their reset clears the mark
+  and says so, and the next sync fills them in (Refs D#2330).
 - **Calendar responses no longer carry internal sync state.** The event data sent to the app
   included the snapshots Yuvomi keeps to match calendar syncs. The app never reads them, so they
   are gone from the responses now; nothing you see changes.
