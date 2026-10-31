@@ -49,6 +49,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   screens. The overview image at the top now starts loading right away on phones too, and the
   footer says "MIT-Lizenz" on the German pages.
 
+### Security
+- **Channel routes only manage household channels.** The admin routes for notification channels now
+  always create a household channel, and a personal channel cannot be pointed at a member through
+  the admin API or changed by it. A member's private reminders stay out of reach of anything an
+  admin sets up, in line with how private entries already work.
+
 ### Fixed
 - **The container starts with `no-new-privileges`.** Hardened setups (Podman Quadlet
   `NoNewPrivileges=true`, `--security-opt no-new-privileges`, Compose `security_opt`) never got
