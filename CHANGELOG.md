@@ -50,6 +50,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   footer says "MIT-Lizenz" on the German pages.
 
 ### Fixed
+- **"Today at a glance" fits narrow phones again.** On a phone, the summary next to the title
+  ("2 events left · 1 task overdue") was not allowed to wrap. When it did not fit - in German
+  already on a 375px screen - the card's content became wider than the card and every row was cut
+  off at the right edge, including "All day" and "Overdue". The summary now moves below the title,
+  right-aligned, when there is no room beside it, and the card's column never grows past the card
+  (#2297).
 - **The container starts with `no-new-privileges`.** Hardened setups (Podman Quadlet
   `NoNewPrivileges=true`, `--security-opt no-new-privileges`, Compose `security_opt`) never got
   past the entrypoint: `gosu` hung as root at 100 % CPU before it switched to the `node` user, so
