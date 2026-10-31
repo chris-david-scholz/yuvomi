@@ -49,12 +49,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   screens. The overview image at the top now starts loading right away on phones too, and the
   footer says "MIT-Lizenz" on the German pages.
 
+### Security
+- **Channel routes only manage household channels.** The admin routes for notification channels now
+  always create a household channel, and a personal channel cannot be pointed at a member through
+  the admin API or changed by it. A member's private reminders stay out of reach of anything an
+  admin sets up, in line with how private entries already work.
+
 ### Fixed
 - **A new app name reaches installed apps.** After renaming the app in Settings, a browser that
   had loaded the app before kept the old name for the installed app, even after uninstalling and
   installing it again: the service worker answered `/manifest.webmanifest` from its cache and only
   asked the server after the next release. It now asks the server first, like it already did for
   `manifest.json`, and uses the cached copy only when the network is slow or offline.
+- **Vitals take the units Yuvomi can convert, and impossible values no longer slip past in them**
+  (#2375). The API took any text as a unit, so 9,000,000 g went past the limits that stop 9,000 kg,
+  and a typo like `kgs` was drawn unconverted next to kilograms. `POST` and `PATCH
+  /api/v1/health/vitals` now accept the units a measurement lists plus those the chart can convert,
+  in any capitalisation (weight also `g`, `lbs` and `stone`, height and head circumference also `m`
+  and `mm`, temperature also `C` and `F`), and check the limits on the converted value: 700,001 g
+  is refused like 700.001 kg. Any other unit is refused with 400 and the reason
+  `health_vital_unit_invalid`, and the message names the ones that work. Weights in stone now also
+  convert in the chart. `unit` stays optional, stored readings stay as they were sent, and older
+  readings in any unit can still be edited.
 - **The container starts with `no-new-privileges`.** Hardened setups (Podman Quadlet
   `NoNewPrivileges=true`, `--security-opt no-new-privileges`, Compose `security_opt`) never got
   past the entrypoint: `gosu` hung as root at 100 % CPU before it switched to the `node` user, so
