@@ -62,6 +62,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   off at the right edge, including "All day" and "Overdue". The summary now moves below the title,
   right-aligned, when there is no room beside it, and the card's column never grows past the card
   (#2297).
+- **The Tasks title stands in full on narrow phones** (#2425). Below 390px wide the title sat next
+  to three buttons and read "Aufgab…" at 360px. There the filter now moves into the "..." menu, and
+  the number of active filters stands on the "..." button and in the menu entry. From 390px up
+  nothing changes.
+- **Repeating tasks keep their time on CalDAV servers across clock changes.** A repeating task with
+  a time now goes out in the household's time zone, so a daily 07:00 task stays at 07:00 after the
+  clocks change, and a weekday repeat near midnight stays on its day. Its start now lies before its
+  due time, which strict servers require. Yuvomi fixes a task already on the server the next time
+  you change it. If another app added a reminder or skipped a date there, the task keeps its old
+  timing until you tick it off, so those still line up.
 - **A new app name reaches installed apps.** After renaming the app in Settings, a browser that
   had loaded the app before kept the old name for the installed app, even after uninstalling and
   installing it again: the service worker answered `/manifest.webmanifest` from its cache and only
@@ -77,6 +87,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `health_vital_unit_invalid`, and the message names the ones that work. Weights in stone now also
   convert in the chart. `unit` stays optional, stored readings stay as they were sent, and older
   readings in any unit can still be edited.
+- **A calendar series that gets a new first date on its way out keeps its exact time.** When Yuvomi
+  moves the start of a series like "last day of the month" onto the first day the rule hits, fractions of a
+  second that came from the calendar provider were dropped from the start and end. They now stay.
 - **The container starts with `no-new-privileges`.** Hardened setups (Podman Quadlet
   `NoNewPrivileges=true`, `--security-opt no-new-privileges`, Compose `security_opt`) never got
   past the entrypoint: `gosu` hung as root at 100 % CPU before it switched to the `node` user, so
